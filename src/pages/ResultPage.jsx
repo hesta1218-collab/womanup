@@ -52,9 +52,11 @@ export default function ResultPage() {
           </div>
 
           <div className="ufc-art-frame">
-            <img src="/assets/wp-logo.jpg" alt="Woman Up logo" />
+            <img className="ufc-mini-logo" src="/assets/wp-logo.jpg" alt="Woman Up logo" />
             <div className="ufc-art-bg" />
-            <FighterSilhouette />
+            <div className="ufc-logo-fighter">
+              <img src="/assets/wp-logo.jpg" alt="Woman Up 女性格斗剪影" />
+            </div>
             <div className="ufc-corner-brand">UFC</div>
             <div className="ufc-name-strip">
               <span>{profile.art}</span>
@@ -203,26 +205,6 @@ export default function ResultPage() {
         </Link>
       </div>
     </>
-  );
-}
-
-function FighterSilhouette() {
-  return (
-    <svg className="fighter-silhouette" viewBox="0 0 360 430" role="img" aria-label="女性格斗剪影">
-      <path className="silhouette-shadow" d="M76 152 151 72l91 46 42-50 54 64-86 79 79 103-56 42-91-87-87 143-64-20 65-151-82-54Z" />
-      <path className="silhouette-red" d="M34 168 95 104l82 80-55 58Z" />
-      <path className="silhouette-red" d="M202 83 266 35l56 72-74 52Z" />
-      <path className="silhouette-red" d="M210 265 332 328l-34 54-126-70Z" />
-      <path d="M181 20c39 0 66 25 66 60s-27 61-66 61-67-26-67-61 28-60 67-60Z" />
-      <path d="M120 146c26-30 101-36 130-4 15 17 18 47 10 78l-18 70 63 96-58 25-74-91-61 93-61-18 55-122-45-42c-24-23-25-62-1-85Z" />
-      <path d="M236 151 335 75l18 48-101 100-43-33 27-39Z" />
-      <path d="M106 159 17 96 0 145l103 87 45-42-42-31Z" />
-      <path d="M151 259 75 427H12l90-192 49 24Z" />
-      <path d="M198 263 346 344l-36 56-151-86 39-51Z" />
-      <path className="silhouette-cut" d="M132 139c25 22 73 24 101 3l-17 54h-62l-22-57Z" />
-      <path className="silhouette-cut" d="M236 143c31 1 56 19 70 43l-42 31c-11-22-28-34-56-39Z" />
-      <path className="silhouette-cut" d="M115 102c19 26 75 29 108 5-15 34-91 38-108-5Z" />
-    </svg>
   );
 }
 

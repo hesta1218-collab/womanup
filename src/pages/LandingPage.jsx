@@ -19,7 +19,7 @@ export default function LandingPage() {
         <img src="/assets/wp-banner.jpg" alt="Woman Up 出拳开始战斗 banner" />
       </section>
 
-      <SlashTitle eyebrow="WOMAN UP!" title="Woman Up！" subtitle="娘们要战斗" />
+      <SlashTitle eyebrow="Fight together！" title="Woman Up！" subtitle="娘们要战斗" />
 
       <BrutalCard className="mb-5">
         <div className="flex items-start justify-between gap-4">
@@ -33,10 +33,8 @@ export default function LandingPage() {
           value={name}
           onChange={(event) => setName(event.target.value)}
           maxLength={18}
-          placeholder="黑巷月 / Kathy / NOIR-K"
           className="mt-5 w-full border-4 border-void bg-paper px-4 py-4 font-display text-3xl uppercase text-void outline-none focus:border-blood"
         />
-        <p className="mt-3 text-sm font-bold text-ink">这个昵称只保存在你的浏览器里，会作为之后排行榜上的名称。</p>
       </BrutalCard>
 
       <ActionButton className="w-full" onClick={enter}>

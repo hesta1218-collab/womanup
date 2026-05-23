@@ -92,7 +92,7 @@ export default function SurvivalGuidePage() {
             <p className="text-xs font-black uppercase text-blood">AFTERCARE</p>
             <h2 className="section-title-dark">事后不要只靠情绪硬扛</h2>
             <p className="mt-2 text-sm font-bold text-ink">
-              两份笔记都强调：安全离开后要补记录、补求助、补身体检查。把“我感觉不对”整理成时间线，才能保护之后的自己。
+              安全离开后要补记录、补求助、补身体检查。把“我感觉不对”整理成时间线，才能保护之后的自己。
             </p>
           </div>
         </div>

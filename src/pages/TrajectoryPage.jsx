@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
 import { ActionButton, BrutalCard, SlashTitle, StatPill } from '../components.jsx';
 import { getAllocation, getProfile, trajectoryDetails } from '../data.js';
 
@@ -10,29 +10,24 @@ export default function TrajectoryPage() {
   const profile = useMemo(() => getProfile(allocation), [allocation]);
   const scenes = trajectoryDetails[profile.key];
   const [active, setActive] = useState(0);
-  const [finished, setFinished] = useState(false);
   const current = scenes[active];
   const done = active === scenes.length - 1;
 
-  useEffect(() => {
-    if (done) {
-      const finishTimer = setTimeout(() => setFinished(true), 2200);
-      return () => clearTimeout(finishTimer);
-    }
-    const timer = setTimeout(() => {
-      setActive((index) => Math.min(index + 1, scenes.length - 1));
-    }, 3600);
-    return () => clearTimeout(timer);
-  }, [active, done, scenes.length]);
-
   function replay() {
-    setFinished(false);
     setActive(0);
+  }
+
+  function previousScene() {
+    setActive((index) => Math.max(index - 1, 0));
+  }
+
+  function nextScene() {
+    setActive((index) => Math.min(index + 1, scenes.length - 1));
   }
 
   return (
     <>
-      <SlashTitle eyebrow="FUTURE CUT" title="未来正在播放" subtitle="最终测试结果揭晓前，先看这一天如何把你推向 1、2、5、10 年之后。" />
+      <SlashTitle eyebrow="FUTURE CUT" title="未来轨迹" subtitle="用按键切换 1、2、5、10 年后的版本，不必等待自动播放。" />
 
       <div className="mb-5 grid grid-cols-2 gap-3">
         <StatPill label="战斗+知识" value={`${profile.powerHours}h`} />
@@ -53,12 +48,14 @@ export default function TrajectoryPage() {
         </div>
         <div className="future-track">
           {scenes.map((scene, index) => (
-            <div
+            <button
+              type="button"
               key={scene.year}
+              onClick={() => setActive(index)}
               className={index === active ? 'future-dot future-dot-active' : 'future-dot'}
             >
               {scene.year.replace('后', '')}
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -76,13 +73,23 @@ export default function TrajectoryPage() {
       </BrutalCard>
 
       <div className="grid gap-3">
-        {finished ? (
+        <div className="grid grid-cols-2 gap-3">
+          <ActionButton variant="black" onClick={previousScene} disabled={active === 0}>
+            <ArrowLeft size={18} strokeWidth={3} />
+            上一段
+          </ActionButton>
+          <ActionButton onClick={nextScene} disabled={done}>
+            下一段
+            <ArrowRight size={18} strokeWidth={3} />
+          </ActionButton>
+        </div>
+        {done ? (
           <ActionButton onClick={() => navigate('/result')}>
             揭晓最终测试结果
             <ArrowRight size={18} strokeWidth={3} />
           </ActionButton>
         ) : (
-          <div className="cinema-hold">正在自动播放未来片段...</div>
+          <div className="cinema-hold">切到 10 年后，即可揭晓最终测试结果。</div>
         )}
         <ActionButton variant="black" onClick={replay}>
           <RotateCcw size={18} strokeWidth={3} />

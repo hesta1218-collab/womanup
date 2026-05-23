@@ -57,20 +57,6 @@ export default function LeaderboardPage() {
         <StatPill label="档位" value={profile.key} />
       </div>
 
-      <BrutalCard className="mb-5">
-        <h2 className="section-title-dark">最强搭档榜</h2>
-        <div className="mt-4 space-y-2">
-          {duos.map((team, index) => (
-            <div key={team.name} className={`leader-row ${team.mine ? 'leader-row-mine' : ''}`}>
-              <span>#{index + 1}</span>
-              <strong>{team.name}</strong>
-              <em>{team.note}</em>
-              <b>{team.score}</b>
-            </div>
-          ))}
-        </div>
-      </BrutalCard>
-
       <BrutalCard dark className="mb-5">
         <h2 className="section-title-light">单人战斗力榜</h2>
         <p className="mt-1 text-sm font-bold text-ash">基于24小时分配、已完成的电梯测试得分与双人 Women UP！闯关游戏进度生成。</p>
@@ -81,6 +67,20 @@ export default function LeaderboardPage() {
               <strong>{player.name}</strong>
               <em>{player.rank} · {player.hours}</em>
               <b>{player.score}</b>
+            </div>
+          ))}
+        </div>
+      </BrutalCard>
+
+      <BrutalCard className="mb-5">
+        <h2 className="section-title-dark">最强搭档榜</h2>
+        <div className="mt-4 space-y-2">
+          {duos.map((team, index) => (
+            <div key={team.name} className={`leader-row ${team.mine ? 'leader-row-mine' : ''}`}>
+              <span>#{index + 1}</span>
+              <strong>{team.name}</strong>
+              <em>{team.note}</em>
+              <b>{team.score}</b>
             </div>
           ))}
         </div>

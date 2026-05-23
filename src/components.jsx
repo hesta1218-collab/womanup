@@ -1,10 +1,10 @@
 import { Camera, Copy, Download, Medal, Share2 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 
-export function SlashTitle({ eyebrow = 'WOMAN UP!', title, subtitle }) {
+export function SlashTitle({ eyebrow = 'Fight together！', title, subtitle }) {
   return (
     <header className="mb-6">
-      <p className="inline-block -skew-x-12 border-2 border-blood bg-blood px-3 py-1 font-display text-sm uppercase text-paper shadow-brutalBlack">
+      <p className="inline-block -skew-x-12 border-2 border-blood bg-blood px-3 py-1 font-display text-sm text-paper shadow-brutalBlack">
         {eyebrow}
       </p>
       <h1 className="persona-title mt-4 origin-left -skew-x-6 font-display text-5xl uppercase leading-[0.9] tracking-normal text-paper sm:text-7xl">
