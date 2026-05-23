@@ -1,45 +1,63 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { ActionButton, BrutalCard, SlashTitle, StatPill } from '../components.jsx';
 import {
+  DUO_CLEAR_BONUS,
   SYSTEM_TEAMMATE,
-  TARGET_PUNCHES,
   getAllocation,
+  getDuoScore,
+  getLeaderboardRecords,
   getPlayerName,
   getProfile,
   getRankInfo,
   getTraining,
   getWisdomScore,
+  hasSavedAllocation,
   isTeamPassed,
-  mockDuos,
-  mockSingles,
+  saveLeaderboardRecord,
 } from '../data.js';
 
 export default function LeaderboardPage() {
   const allocation = getAllocation();
   const training = getTraining();
+  const [savedRecords, setSavedRecords] = useState(() => getLeaderboardRecords());
   const profile = getProfile(allocation);
-  const rankInfo = getRankInfo(allocation, training);
+  const rankInfo = getRankInfo(allocation, training, savedRecords);
   const wisdomScore = getWisdomScore();
   const passed = isTeamPassed(training);
-  const duoScore = rankInfo.score + (passed ? 520 : Math.round((training.partnerPunches || 3) * 70));
+  const duoScore = getDuoScore(rankInfo.score, training);
   const playerName = getPlayerName();
+  const hasPlayed = hasSavedAllocation();
 
-  const singles = [{ name: playerName, score: rankInfo.score, rank: profile.key, hours: `${profile.powerHours}h`, mine: true }, ...mockSingles]
+  const currentRecord = useMemo(
+    () =>
+      hasPlayed
+        ? {
+            name: playerName,
+            score: rankInfo.score,
+            rank: profile.key,
+            hours: `${profile.powerHours}h`,
+            duoScore,
+            duoComplete: passed,
+            note: passed ? `${SYSTEM_TEAMMATE.name} 系统队友通关 · +${DUO_CLEAR_BONUS}` : '第二关未通关',
+            mine: true,
+          }
+        : null,
+    [duoScore, hasPlayed, passed, playerName, profile.key, profile.powerHours, rankInfo.score],
+  );
+
+  useEffect(() => {
+    if (!currentRecord) return;
+    setSavedRecords(saveLeaderboardRecord(currentRecord));
+  }, [currentRecord]);
+
+  const singles = [...savedRecords]
     .sort((a, b) => b.score - a.score)
     .slice(0, 10);
-  const duos = [
-    {
-      name: '红线双刃',
-      score: duoScore,
-      note: passed
-        ? `${training.comboComplete ? playerName : SYSTEM_TEAMMATE.name} 呼吸通关`
-        : `${playerName} ${training.punches || 0}/${TARGET_PUNCHES} · 队友待命`,
-      mine: true,
-    },
-    ...mockDuos,
-  ]
-    .sort((a, b) => b.score - a.score)
+  const duos = [...savedRecords]
+    .filter((record) => record.duoComplete)
+    .sort((a, b) => b.duoScore - a.duoScore)
     .slice(0, 8);
 
   return (
@@ -59,30 +77,39 @@ export default function LeaderboardPage() {
 
       <BrutalCard dark className="mb-5">
         <h2 className="section-title-light">单人战斗力榜</h2>
-        <p className="mt-1 text-sm font-bold text-ash">基于24小时分配、已完成的电梯测试得分与双人 Women UP！闯关游戏进度生成。</p>
+        <p className="mt-1 text-sm font-bold text-ash">现场观众完成测试后会进入这里。当前版本不再混入网站自带假数据。</p>
         <div className="mt-4 space-y-2">
-          {singles.map((player, index) => (
-            <div key={`${player.name}-${index}`} className={`leader-row-dark ${player.mine ? 'leader-row-dark-mine' : ''}`}>
-              <span>#{index + 1}</span>
-              <strong>{player.name}</strong>
-              <em>{player.rank} · {player.hours}</em>
-              <b>{player.score}</b>
-            </div>
-          ))}
+          {singles.length ? (
+            singles.map((player, index) => (
+              <div key={`${player.name}-${index}`} className={`leader-row-dark ${player.name === playerName ? 'leader-row-dark-mine' : ''}`}>
+                <span>#{index + 1}</span>
+                <strong>{player.name}</strong>
+                <em>{player.rank} · {player.hours}</em>
+                <b>{player.score}</b>
+              </div>
+            ))
+          ) : (
+            <p className="leaderboard-empty">还没有现场成绩。完成 24 小时测试后，第一个名字会出现在这里。</p>
+          )}
         </div>
       </BrutalCard>
 
       <BrutalCard className="mb-5">
         <h2 className="section-title-dark">最强搭档榜</h2>
+        <p className="mt-1 text-sm font-bold text-ink">Demo 版使用系统队友：完成第二关即获得双人满分加成 {DUO_CLEAR_BONUS}。</p>
         <div className="mt-4 space-y-2">
-          {duos.map((team, index) => (
-            <div key={team.name} className={`leader-row ${team.mine ? 'leader-row-mine' : ''}`}>
-              <span>#{index + 1}</span>
-              <strong>{team.name}</strong>
-              <em>{team.note}</em>
-              <b>{team.score}</b>
-            </div>
-          ))}
+          {duos.length ? (
+            duos.map((team, index) => (
+              <div key={`${team.name}-${index}`} className={`leader-row ${team.name === playerName ? 'leader-row-mine' : ''}`}>
+                <span>#{index + 1}</span>
+                <strong>{team.name}</strong>
+                <em>{team.note}</em>
+                <b>{team.duoScore}</b>
+              </div>
+            ))
+          ) : (
+            <p className="leaderboard-empty leaderboard-empty-light">还没有通关第二关的队伍。完成“找回呼吸”后会出现在这里。</p>
+          )}
         </div>
       </BrutalCard>
 

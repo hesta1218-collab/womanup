@@ -4,9 +4,11 @@ export const STORAGE_KEYS = {
   invite: 'woman-up:invite',
   wisdom: 'woman-up:wisdom',
   playerName: 'woman-up:player-name',
+  leaderboard: 'woman-up:leaderboard',
 };
 
 export const ELEVATOR_TEST_MAX_SCORE = 500;
+export const DUO_CLEAR_BONUS = 520;
 export const WISDOM_TEST_VERSION = 'elevator-random-options-v1';
 export const CHALLENGE_SECONDS = 10;
 export const TARGET_PUNCHES = 5;
@@ -511,27 +513,6 @@ export const wisdomQuestions = [
   },
 ];
 
-export const mockSingles = [
-  { name: 'NOVA-K', score: 965, rank: 'S', hours: '12.0h' },
-  { name: '赤拳阿盐', score: 914, rank: 'S', hours: '10.5h' },
-  { name: '黑巷月', score: 877, rank: 'A', hours: '9.5h' },
-  { name: '地面女王', score: 843, rank: 'A', hours: '8.5h' },
-  { name: '一拳醒醒', score: 796, rank: 'B', hours: '7.0h' },
-  { name: '钢膝周末', score: 762, rank: 'B', hours: '6.5h' },
-  { name: '直拳开路', score: 688, rank: 'C', hours: '5.0h' },
-  { name: '夜跑不回头', score: 641, rank: 'C', hours: '4.5h' },
-  { name: '今天觉醒', score: 552, rank: 'D', hours: '3.0h' },
-  { name: '删掉短视频', score: 510, rank: 'D', hours: '2.5h' },
-];
-
-export const mockDuos = [
-  { name: '红线双刃', score: 1880, note: '10 秒组合拳通关' },
-  { name: '电梯终结者', score: 1764, note: '生存题零失误' },
-  { name: '地面与铁肘', score: 1696, note: 'A+B 组合' },
-  { name: '不走夜路队', score: 1510, note: '7 天连续打卡' },
-  { name: '前手开门', score: 1468, note: '视觉检测 5/5' },
-];
-
 export const defaultTraining = {
   punches: 0,
   partnerPunches: 3,
@@ -559,6 +540,10 @@ export function saveAllocation(allocation) {
   localStorage.setItem(STORAGE_KEYS.allocation, JSON.stringify(allocation));
 }
 
+export function hasSavedAllocation() {
+  return Boolean(localStorage.getItem(STORAGE_KEYS.allocation));
+}
+
 export function getPlayerName() {
   return localStorage.getItem(STORAGE_KEYS.playerName) || '你';
 }
@@ -582,6 +567,47 @@ export function getTraining() {
 
 export function saveTraining(training) {
   localStorage.setItem(STORAGE_KEYS.training, JSON.stringify(training));
+}
+
+export function getLeaderboardRecords() {
+  const saved = localStorage.getItem(STORAGE_KEYS.leaderboard);
+  if (!saved) return [];
+
+  try {
+    const records = JSON.parse(saved);
+    if (!Array.isArray(records)) return [];
+    return records
+      .filter((record) => record?.name && Number.isFinite(Number(record.score)))
+      .map((record) => ({
+        ...record,
+        score: Number(record.score),
+        duoScore: Number(record.duoScore || 0),
+        updatedAt: Number(record.updatedAt || 0),
+      }));
+  } catch {
+    return [];
+  }
+}
+
+export function saveLeaderboardRecord(record) {
+  const current = getLeaderboardRecords();
+  const existingIndex = current.findIndex((item) => item.name === record.name);
+  const nextRecord = {
+    ...record,
+    updatedAt: Date.now(),
+  };
+
+  const next = [...current];
+  if (existingIndex >= 0) {
+    const existing = current[existingIndex];
+    next[existingIndex] = nextRecord.score >= existing.score ? nextRecord : { ...existing, updatedAt: nextRecord.updatedAt };
+  } else {
+    next.push(nextRecord);
+  }
+
+  const sorted = next.sort((a, b) => b.score - a.score || b.updatedAt - a.updatedAt).slice(0, 60);
+  localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(sorted));
+  return sorted;
 }
 
 export function getInvite() {
@@ -663,14 +689,20 @@ export function isTeamPassed(training = getTraining()) {
   return Boolean(training.comboComplete || training.partnerComplete);
 }
 
-export function getRankInfo(allocation, training = getTraining()) {
+export function getDuoScore(score, training = getTraining()) {
+  return isTeamPassed(training) ? score + DUO_CLEAR_BONUS : 0;
+}
+
+export function getRankInfo(allocation, training = getTraining(), records = getLeaderboardRecords()) {
   const score = getCombatScore(allocation, training);
-  const ahead = mockSingles.filter((player) => player.score > score).length;
-  const rank = ahead + 1;
-  const nextScore = [...mockSingles].reverse().find((player) => player.score > score)?.score || score + 35;
-  const gap = Math.max(8, nextScore - score);
-  const trainingLift = Math.max(1, Math.ceil(gap / 34));
-  const passCount = Math.min(3, trainingLift + 2);
+  const playerName = getPlayerName();
+  const leaderboard = [{ name: playerName, score }, ...records.filter((player) => player.name !== playerName)]
+    .sort((a, b) => b.score - a.score || Number(b.updatedAt || 0) - Number(a.updatedAt || 0));
+  const rank = Math.max(leaderboard.findIndex((player) => player.name === playerName) + 1, 1);
+  const nextPlayer = rank > 1 ? leaderboard[rank - 2] : null;
+  const gap = nextPlayer ? Math.max(1, nextPlayer.score - score) : 0;
+  const trainingLift = gap ? Math.max(1, Math.ceil(gap / 34)) : 0;
+  const passCount = leaderboard.filter((player) => player.score < score).length;
 
   return {
     score,
@@ -678,6 +710,6 @@ export function getRankInfo(allocation, training = getTraining()) {
     gap,
     trainingLift,
     passCount,
-    line: `第${rank}位 · 再提升${trainingLift}h训练可超过${passCount}人`,
+    line: rank === 1 ? `第1位 · 当前榜首` : `第${rank}位 · 距离上一名${gap}分`,
   };
 }

@@ -1,27 +1,47 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, Brain, RefreshCcw, Swords } from 'lucide-react';
 import { ActionButton, BrutalCard, RadarChart, ShareTools, SlashTitle, StatPill } from '../components.jsx';
 import {
   getAllocation,
+  getDuoScore,
+  getLeaderboardRecords,
   getPlayerName,
   getProfile,
   getRankInfo,
+  getTraining,
   getWisdomScore,
   historicalWomenQuotes,
+  isTeamPassed,
   trajectoryDetails,
-  mockSingles,
+  saveLeaderboardRecord,
 } from '../data.js';
 
 export default function ResultPage() {
   const navigate = useNavigate();
   const allocation = getAllocation();
+  const training = getTraining();
+  const [leaderboardRecords, setLeaderboardRecords] = useState(() => getLeaderboardRecords());
   const profile = useMemo(() => getProfile(allocation), [allocation]);
-  const rankInfo = getRankInfo(allocation);
+  const rankInfo = getRankInfo(allocation, training, leaderboardRecords);
   const wisdomScore = getWisdomScore();
   const trajectory = trajectoryDetails[profile.key];
   const playerName = getPlayerName();
+  const duoComplete = isTeamPassed(training);
+  const duoScore = getDuoScore(rankInfo.score, training);
   const quote = useMemo(() => historicalWomenQuotes[Math.floor(Math.random() * historicalWomenQuotes.length)], []);
+  const currentRecord = useMemo(
+    () => ({
+      name: playerName,
+      score: rankInfo.score,
+      rank: profile.key,
+      hours: `${profile.powerHours}h`,
+      duoScore,
+      duoComplete,
+      note: duoComplete ? '系统队友通关 · 双人满分' : '第二关未通关',
+    }),
+    [duoComplete, duoScore, playerName, profile.key, profile.powerHours, rankInfo.score],
+  );
   const radarStats = [
     ['攻击', profile.radar[0]],
     ['防御', profile.radar[1]],
@@ -29,6 +49,15 @@ export default function ResultPage() {
     ['意志', profile.radar[3]],
     ['策略', profile.radar[4]],
   ];
+  const resultLeaderboard = leaderboardRecords
+    .filter((record) => record.name !== playerName)
+    .concat(currentRecord)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10);
+
+  useEffect(() => {
+    setLeaderboardRecords(saveLeaderboardRecord(currentRecord));
+  }, [currentRecord]);
 
   return (
     <>
@@ -142,17 +171,14 @@ export default function ResultPage() {
 
       <BrutalCard className="mb-5">
         <h2 className="section-title-dark">女性综合战斗力排名榜</h2>
-        <p className="mt-1 text-sm font-bold text-ink">这是根据你的 24 小时时间分配和已完成关卡生成的当前排名。昵称会与入口页保持一致。</p>
+        <p className="mt-1 text-sm font-bold text-ink">这里只显示现场真实完成测试的成绩，不再混入网站自带数据。</p>
         <div className="mt-4 bg-void p-4 text-paper">
           <p className="font-display text-3xl uppercase text-blood">{rankInfo.line}</p>
-          <p className="mt-1 text-sm font-bold text-ash">前方一人差距 {rankInfo.gap} 分。你可以重新分配 24 小时，看看排名如何变化。</p>
+          <p className="mt-1 text-sm font-bold text-ash">你可以重新分配 24 小时或完成关卡，刷新自己的最好成绩。</p>
         </div>
         <div className="mt-4 space-y-2">
-          {[{ name: playerName, score: rankInfo.score, rank: profile.key, hours: `${profile.powerHours}h`, mine: true }, ...mockSingles]
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 10)
-            .map((player, index) => (
-              <div key={`${player.name}-${index}`} className={`leader-row ${player.mine ? 'leader-row-mine' : ''}`}>
+          {resultLeaderboard.map((player, index) => (
+              <div key={`${player.name}-${index}`} className={`leader-row ${player.name === playerName ? 'leader-row-mine' : ''}`}>
                 <span>#{index + 1}</span>
                 <strong>{player.name}</strong>
                 <em>{player.rank}</em>

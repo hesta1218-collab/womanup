@@ -2,9 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Bot, Shield, Swords } from 'lucide-react';
 import { ActionButton, BrutalCard, SlashTitle, StatPill } from '../components.jsx';
 import {
+  DUO_CLEAR_BONUS,
   SYSTEM_TEAMMATE,
   TARGET_PUNCHES,
   getAllocation,
+  getDuoScore,
   getInvite,
   getProfile,
   getRankInfo,
@@ -19,7 +21,7 @@ export default function SquadPage() {
   const training = getTraining();
   const rankInfo = getRankInfo(allocation, training);
   const passed = isTeamPassed(training);
-  const duoScore = rankInfo.score + (passed ? 520 : Math.round((training.partnerPunches || 3) * 70));
+  const duoScore = getDuoScore(rankInfo.score, training);
 
   return (
     <>
@@ -70,7 +72,9 @@ export default function SquadPage() {
           <Progress label={SYSTEM_TEAMMATE.name} value={training.partnerComplete ? TARGET_PUNCHES : training.partnerPunches || 3} max={TARGET_PUNCHES} />
           <Progress label="通关判定" value={passed ? 1 : 0} max={1} />
         </div>
-        <p className="mt-4 bg-void p-3 font-black text-paper">当前双人分：{duoScore}</p>
+        <p className="mt-4 bg-void p-3 font-black text-paper">
+          当前双人分：{passed ? duoScore : '未通关'} · Demo 版完成即 +{DUO_CLEAR_BONUS}
+        </p>
       </BrutalCard>
     </>
   );
