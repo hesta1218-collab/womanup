@@ -36,39 +36,54 @@ export default function ResultPage() {
 
       <section id="result-card" className="fight-card mb-5">
         <div className="ufc-card-shell">
-          <div className="ufc-grade-row">
-            <div>
-              <span>WOMAN UP COMBAT CARD</span>
-              <strong>{playerName}</strong>
+          <div className="ufc-main-card">
+            <div className="ufc-grade-row">
+              <div>
+                <span>WOMAN UP COMBAT CARD</span>
+                <strong>{playerName}</strong>
+              </div>
+              <div>
+                <span>战斗力</span>
+                <b>{rankInfo.score}</b>
+              </div>
+              <div>
+                <span>档位</span>
+                <b>{profile.key}</b>
+              </div>
             </div>
-            <div>
-              <span>战斗力</span>
-              <b>{rankInfo.score}</b>
+
+            <div className="ufc-art-frame">
+              <img className="ufc-mini-logo" src="/assets/wp-logo.jpg" alt="Woman Up logo" />
+              <div className="ufc-art-bg" />
+              <div className="ufc-logo-fighter">
+                <img src="/assets/wp-logo.jpg" alt="Woman Up 女性格斗剪影" />
+                <span>{profile.art}</span>
+              </div>
+              <div className="ufc-corner-brand">UFC</div>
+              <div className="ufc-name-strip">
+                <span>{profile.art}</span>
+                <strong>{playerName}</strong>
+                <em>{profile.title}</em>
+              </div>
             </div>
-            <div>
-              <span>档位</span>
-              <b>{profile.key}</b>
+
+            <div className="ufc-card-footer">
+              <span>RANK #{rankInfo.rank}</span>
+              <span>{profile.reason}</span>
+              <span>{wisdomScore.complete ? `${wisdomScore.score} 电梯测试` : '电梯测试待完成'}</span>
             </div>
           </div>
 
-          <div className="ufc-art-frame">
-            <img className="ufc-mini-logo" src="/assets/wp-logo.jpg" alt="Woman Up logo" />
-            <div className="ufc-art-bg" />
-            <div className="ufc-logo-fighter">
-              <img src="/assets/wp-logo.jpg" alt="Woman Up 女性格斗剪影" />
+          <div className="ufc-side-panel">
+            <div className="ufc-side-title">
+              <span>FIVE DIMENSIONS</span>
+              <strong>五维数据</strong>
             </div>
-            <div className="ufc-corner-brand">UFC</div>
-            <div className="ufc-name-strip">
-              <span>{profile.art}</span>
-              <strong>{playerName}</strong>
-              <em>{profile.title}</em>
-            </div>
-          </div>
 
-          <div className="ufc-bottom-panel">
             <div className="ufc-radar-box">
               <RadarChart values={profile.radar} score={rankInfo.score} />
             </div>
+
             <div className="ufc-stat-grid">
               {radarStats.map(([label, value]) => (
                 <div key={label} className="ufc-stat-cell">
@@ -82,12 +97,6 @@ export default function ResultPage() {
           <div className="ufc-signature">
             <p>「{quote.quote}」</p>
             <strong>{quote.name}</strong>
-          </div>
-
-          <div className="ufc-card-footer">
-            <span>RANK #{rankInfo.rank}</span>
-            <span>{profile.reason}</span>
-            <span>{wisdomScore.complete ? `${wisdomScore.score} 电梯测试` : '电梯测试待完成'}</span>
           </div>
         </div>
       </section>

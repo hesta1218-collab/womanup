@@ -44,7 +44,7 @@ export default function LeaderboardPage() {
 
   return (
     <>
-      <SlashTitle eyebrow="RANK" title="战斗力排行榜" subtitle="昵称来自入口页。24 小时测试、已完成的电梯测试和闯关进度会生成你的当前榜单位置。" />
+      <SlashTitle eyebrow="RANK" title="战斗力排行榜" />
 
       <div className="mb-5 grid grid-cols-3 gap-3">
         <StatPill label="单人分" value={rankInfo.score} />
