@@ -215,12 +215,17 @@ export default function ResultPage() {
 
 function FighterSilhouette() {
   return (
-    <svg className="fighter-silhouette" viewBox="0 0 260 360" role="img" aria-label="女性战斗者剪影">
-      <path d="M126 16c26 0 43 18 43 42 0 27-17 45-43 45-25 0-42-18-42-45 0-24 17-42 42-42Z" />
-      <path d="M77 120c18-18 80-21 102 0 11 11 14 34 7 58l-12 44 44 79-36 24-50-72-45 86-43-14 37-101-14-49c-6-22-3-43 10-55Z" />
-      <path d="M72 131 23 78 7 111l55 75 34-22-24-33ZM185 131l54-43 13 38-61 61-31-25 25-31Z" />
-      <path d="M111 248 80 349H31l48-126 32 25ZM151 248l72 83-34 30-76-87 38-26Z" />
-      <path d="M92 107c16 13 56 13 72 0l-14 37h-44l-14-37Z" className="fighter-cut" />
+    <svg className="fighter-silhouette" viewBox="0 0 300 380" role="img" aria-label="女性格斗剪影">
+      <path className="fighter-red-mark" d="M34 254 248 48l26 28L58 298Z" />
+      <path className="fighter-red-mark" d="M57 71 90 42l41 93-34 20Z" />
+      <path d="M158 26c27 0 46 18 46 43 0 27-18 46-45 46-28 0-47-19-47-46 0-25 19-43 46-43Z" />
+      <path d="M82 138c18-29 89-38 126-13 18 12 28 34 26 63l-4 58 45 77-39 28-56-71-42 84-49-13 36-111-31-31c-20-21-25-47-12-71Z" />
+      <path d="M206 124 284 79l10 42-79 71-31-25 22-43Z" />
+      <path d="M87 150 25 114 4 147l77 59 33-31-27-25Z" />
+      <path d="M122 235 70 366H18l65-151 39 20Z" />
+      <path d="M173 237 290 315l-30 42-119-75 32-45Z" />
+      <path d="M118 116c18 14 63 16 82 2l-16 43h-49l-17-45Z" className="fighter-cut" />
+      <path d="M211 108c22-2 43 9 53 27l-31 21c-8-15-22-23-42-23Z" className="fighter-cut" />
     </svg>
   );
 }

@@ -869,25 +869,42 @@ button:disabled {
   overflow: hidden;
   border: 5px solid #f5f5f5;
   background:
-    radial-gradient(circle at 50% 24%, rgba(230, 30, 50, 0.28) 0 64px, transparent 66px),
+    linear-gradient(132deg, transparent 0 42%, rgba(230, 30, 50, 0.55) 43% 51%, transparent 52%),
+    radial-gradient(circle at 56% 24%, rgba(230, 30, 50, 0.3) 0 64px, transparent 66px),
     repeating-linear-gradient(90deg, rgba(245, 245, 245, 0.12) 0 1px, transparent 1px 18px),
     #2b2b2b;
   clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
 }
 
+.fighter-stage::before {
+  content: '';
+  position: absolute;
+  inset: auto -28px 18px -28px;
+  height: 70px;
+  transform: rotate(-5deg);
+  background:
+    repeating-linear-gradient(90deg, rgba(245, 245, 245, 0.28) 0 3px, transparent 3px 12px),
+    #e61e32;
+  opacity: 0.85;
+}
+
 .fighter-silhouette {
   position: absolute;
-  left: 50%;
-  bottom: -12px;
+  left: 48%;
+  bottom: -18px;
   z-index: 3;
-  width: min(96%, 220px);
-  transform: translateX(-50%);
+  width: min(108%, 260px);
+  transform: translateX(-50%) rotate(-4deg);
   fill: #f5f5f5;
-  filter: drop-shadow(9px 0 0 #e61e32) drop-shadow(-5px 5px 0 #1a1a1a);
+  filter: drop-shadow(12px 0 0 #e61e32) drop-shadow(-7px 7px 0 #1a1a1a);
 }
 
 .fighter-silhouette .fighter-cut {
   fill: #1a1a1a;
+}
+
+.fighter-silhouette .fighter-red-mark {
+  fill: #e61e32;
 }
 
 .fighter-shadow {
@@ -896,7 +913,7 @@ button:disabled {
   width: 76%;
   aspect-ratio: 1 / 1.45;
   background: #e61e32;
-  opacity: 0.52;
+  opacity: 0.42;
   clip-path: polygon(50% 0, 66% 18%, 60% 35%, 80% 64%, 62% 100%, 38% 100%, 20% 64%, 40% 35%, 34% 18%);
 }
 

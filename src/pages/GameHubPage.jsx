@@ -1,4 +1,4 @@
-import { ArrowRight, DoorOpen, Wind } from 'lucide-react';
+import { ArrowRight, DoorOpen, LockKeyhole, Wind } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ActionButton, BrutalCard, SlashTitle } from '../components.jsx';
 
@@ -38,6 +38,16 @@ export default function GameHubPage() {
             进入第二关
             <ArrowRight size={18} strokeWidth={3} />
           </ActionButton>
+        </BrutalCard>
+
+        <BrutalCard>
+          <div className="flex items-center gap-4">
+            <LockKeyhole className="shrink-0 text-blood" size={42} strokeWidth={3} />
+            <div>
+              <p className="text-xs font-black uppercase text-blood">NEXT STAGE</p>
+              <h2 className="section-title-dark">更多关卡敬请期待</h2>
+            </div>
+          </div>
         </BrutalCard>
       </div>
     </>
