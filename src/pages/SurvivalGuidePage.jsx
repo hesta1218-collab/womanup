@@ -8,7 +8,7 @@ export default function SurvivalGuidePage() {
 
   return (
     <>
-      <SlashTitle eyebrow="SURVIVAL FILE" title="生存技能学习" subtitle="根据两份防身术笔记整理：先识别风险，再拉开距离，最后补上求助和证据链。" />
+      <SlashTitle eyebrow="SURVIVAL FILE" title="生存技能学习" subtitle="先识别风险，再拉开距离，最后补上求助和证据链。" />
 
       <BrutalCard dark className="mb-5">
         <p className="text-xs font-black uppercase text-blood">CORE RULE</p>
