@@ -35,65 +35,58 @@ export default function ResultPage() {
       <SlashTitle eyebrow="RESULT" title={`${profile.key}档 · ${profile.title}`} subtitle={profile.punchline} />
 
       <section id="result-card" className="fight-card mb-5">
-        <div className="fight-card-collage">
-          <div className="fight-card-logo-stack">
+        <div className="ufc-card-shell">
+          <div className="ufc-grade-row">
+            <div>
+              <span>WOMAN UP COMBAT CARD</span>
+              <strong>{playerName}</strong>
+            </div>
+            <div>
+              <span>战斗力</span>
+              <b>{rankInfo.score}</b>
+            </div>
+            <div>
+              <span>档位</span>
+              <b>{profile.key}</b>
+            </div>
+          </div>
+
+          <div className="ufc-art-frame">
             <img src="/assets/wp-logo.jpg" alt="Woman Up logo" />
-            <span>WOMAN UP!</span>
-          </div>
-          <div className="fight-card-nameplate">
-            <p>FIGHTER CARD</p>
-            <h2>{playerName}</h2>
-            <strong>OFFICIAL COMBAT FLASH CARD</strong>
-          </div>
-          <span>{profile.key}档</span>
-        </div>
-
-        <div className="fight-card-main">
-          <div className="fighter-stage" aria-hidden="true">
+            <div className="ufc-art-bg" />
             <FighterSilhouette />
-            <div className="fighter-shadow fighter-shadow-one" />
-            <div className="fighter-shadow fighter-shadow-two" />
-          </div>
-
-          <div className="fight-card-info">
-            <p className="fight-card-kicker">TOTAL POWER</p>
-            <div className="fight-card-score">
-              <span>COMBAT SCORE</span>
-              <strong>{rankInfo.score}</strong>
-              <em>第 {rankInfo.rank} 位 · {profile.title}</em>
-            </div>
-            <div className="fight-card-tags">
+            <div className="ufc-corner-brand">UFC</div>
+            <div className="ufc-name-strip">
               <span>{profile.art}</span>
-              <span>{profile.powerHours}h 战斗+知识</span>
-              <span>{wisdomScore.complete ? `${wisdomScore.score} 电梯测试` : '电梯测试待完成'}</span>
+              <strong>{playerName}</strong>
+              <em>{profile.title}</em>
             </div>
           </div>
-        </div>
 
-        <div className="fight-card-board">
-          <RadarChart values={profile.radar} score={rankInfo.score} />
-          <div className="fight-card-side">
-            <div className="fight-card-stats">
+          <div className="ufc-bottom-panel">
+            <div className="ufc-radar-box">
+              <RadarChart values={profile.radar} score={rankInfo.score} />
+            </div>
+            <div className="ufc-stat-grid">
               {radarStats.map(([label, value]) => (
-                <div key={label} className="fight-stat-row">
+                <div key={label} className="ufc-stat-cell">
                   <span>{label}</span>
                   <b>{value}</b>
-                  <i style={{ width: `${value}%` }} />
                 </div>
               ))}
             </div>
-            <div className="fight-card-quote">
-              <p>「{quote.quote}」</p>
-              <strong>{quote.name}</strong>
-              <span>{quote.role}</span>
-            </div>
           </div>
-        </div>
 
-        <div className="fight-card-footer">
-          <span>RANK #{rankInfo.rank}</span>
-          <span>{profile.reason}</span>
-          <span>SHARE READY</span>
+          <div className="ufc-signature">
+            <p>「{quote.quote}」</p>
+            <strong>{quote.name}</strong>
+          </div>
+
+          <div className="ufc-card-footer">
+            <span>RANK #{rankInfo.rank}</span>
+            <span>{profile.reason}</span>
+            <span>{wisdomScore.complete ? `${wisdomScore.score} 电梯测试` : '电梯测试待完成'}</span>
+          </div>
         </div>
       </section>
 
@@ -215,17 +208,20 @@ export default function ResultPage() {
 
 function FighterSilhouette() {
   return (
-    <svg className="fighter-silhouette" viewBox="0 0 300 380" role="img" aria-label="女性格斗剪影">
-      <path className="fighter-red-mark" d="M34 254 248 48l26 28L58 298Z" />
-      <path className="fighter-red-mark" d="M57 71 90 42l41 93-34 20Z" />
-      <path d="M158 26c27 0 46 18 46 43 0 27-18 46-45 46-28 0-47-19-47-46 0-25 19-43 46-43Z" />
-      <path d="M82 138c18-29 89-38 126-13 18 12 28 34 26 63l-4 58 45 77-39 28-56-71-42 84-49-13 36-111-31-31c-20-21-25-47-12-71Z" />
-      <path d="M206 124 284 79l10 42-79 71-31-25 22-43Z" />
-      <path d="M87 150 25 114 4 147l77 59 33-31-27-25Z" />
-      <path d="M122 235 70 366H18l65-151 39 20Z" />
-      <path d="M173 237 290 315l-30 42-119-75 32-45Z" />
-      <path d="M118 116c18 14 63 16 82 2l-16 43h-49l-17-45Z" className="fighter-cut" />
-      <path d="M211 108c22-2 43 9 53 27l-31 21c-8-15-22-23-42-23Z" className="fighter-cut" />
+    <svg className="fighter-silhouette" viewBox="0 0 360 430" role="img" aria-label="女性格斗剪影">
+      <path className="silhouette-shadow" d="M76 152 151 72l91 46 42-50 54 64-86 79 79 103-56 42-91-87-87 143-64-20 65-151-82-54Z" />
+      <path className="silhouette-red" d="M34 168 95 104l82 80-55 58Z" />
+      <path className="silhouette-red" d="M202 83 266 35l56 72-74 52Z" />
+      <path className="silhouette-red" d="M210 265 332 328l-34 54-126-70Z" />
+      <path d="M181 20c39 0 66 25 66 60s-27 61-66 61-67-26-67-61 28-60 67-60Z" />
+      <path d="M120 146c26-30 101-36 130-4 15 17 18 47 10 78l-18 70 63 96-58 25-74-91-61 93-61-18 55-122-45-42c-24-23-25-62-1-85Z" />
+      <path d="M236 151 335 75l18 48-101 100-43-33 27-39Z" />
+      <path d="M106 159 17 96 0 145l103 87 45-42-42-31Z" />
+      <path d="M151 259 75 427H12l90-192 49 24Z" />
+      <path d="M198 263 346 344l-36 56-151-86 39-51Z" />
+      <path className="silhouette-cut" d="M132 139c25 22 73 24 101 3l-17 54h-62l-22-57Z" />
+      <path className="silhouette-cut" d="M236 143c31 1 56 19 70 43l-42 31c-11-22-28-34-56-39Z" />
+      <path className="silhouette-cut" d="M115 102c19 26 75 29 108 5-15 34-91 38-108-5Z" />
     </svg>
   );
 }
