@@ -21,6 +21,8 @@ export default function LandingPage() {
 
       <SlashTitle eyebrow="Fight together！" title="Woman Up！" subtitle="娘们要战斗" />
 
+      <AnonymousLetter />
+
       <BrutalCard className="mb-5">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -42,5 +44,46 @@ export default function LandingPage() {
         <ArrowRight size={18} strokeWidth={3} />
       </ActionButton>
     </>
+  );
+}
+
+function AnonymousLetter() {
+  return (
+    <section className="phantom-letter-wrap mb-6" aria-label="心之匿名信">
+      <article className="phantom-letter">
+        <div className="phantom-letter-paper">
+          <span className="phantom-tape phantom-tape-left" aria-hidden="true" />
+          <span className="phantom-tape phantom-tape-right" aria-hidden="true" />
+          <div className="phantom-letter-copy">
+            <p className="phantom-letter-line phantom-letter-lead">
+              <span className="ransom-chip">独居、异地女性</span>
+              {'的困境——'}
+              <span className="ransom-hot">孤独</span>
+              {'、'}
+              <span className="ransom-hot ransom-hot-alt">低能量</span>
+              {'、生活节奏滑落、人身安全隐患、自我保护困境'}
+            </p>
+            <p className="phantom-letter-line">
+              重点不是戏剧性崩溃，而是小事如何在危险发生前慢慢堆积
+            </p>
+          </div>
+          <div className="phantom-letter-callout">
+            <p className="phantom-letter-motto">「文明其精神 野蛮其体魄」</p>
+            <p className="phantom-letter-line phantom-letter-punch">
+              战斗力和精神气的恢复，可能只需要你挥出人生<span>第一个直拳</span>
+            </p>
+          </div>
+          <p className="phantom-letter-line phantom-letter-wide">
+            不是让你一个人变强，而是让你在重建生活秩序的过程中，找到和你同频的人。
+          </p>
+        </div>
+        <div className="phantom-dagger" aria-hidden="true">
+          <span className="dagger-blade" />
+          <span className="dagger-guard" />
+          <span className="dagger-handle" />
+        </div>
+      </article>
+      <div className="phantom-divider" aria-hidden="true" />
+    </section>
   );
 }
