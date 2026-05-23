@@ -1677,6 +1677,121 @@ button:disabled {
   clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
 }
 
+.survival-principle {
+  border: 4px solid #f5f5f5;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  padding: 0.85rem;
+  box-shadow: 5px 5px 0 #e61e32;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+.survival-principle strong {
+  display: inline-grid;
+  height: 34px;
+  width: 34px;
+  place-items: center;
+  background: #e61e32;
+  color: #f5f5f5;
+  font-family: Impact, 'Arial Black', sans-serif;
+  font-size: 1.35rem;
+}
+
+.survival-principle h3 {
+  margin: 0.6rem 0 0;
+  font-family: Impact, 'Arial Black', sans-serif;
+  font-size: 2rem;
+  line-height: 0.95;
+}
+
+.survival-principle p {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 850;
+}
+
+.survival-check {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 0.45rem;
+  align-items: center;
+  border: 3px solid #1a1a1a;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.survival-check svg {
+  color: #e61e32;
+}
+
+.survival-check-dark {
+  border-color: #e61e32;
+  background: #1a1a1a;
+  color: #f5f5f5;
+}
+
+.scenario-block {
+  border: 4px solid #f5f5f5;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  padding: 0.75rem;
+  box-shadow: 4px 4px 0 #e61e32;
+}
+
+.scenario-block strong {
+  display: inline-block;
+  transform: skewX(-10deg);
+  background: #1a1a1a;
+  color: #f5f5f5;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 950;
+}
+
+.scenario-block p {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.scenario-block-hot {
+  background: #e61e32;
+  color: #f5f5f5;
+}
+
+.scenario-block-hot strong {
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+.survival-drill {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: stretch;
+  border: 3px solid #1a1a1a;
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+.survival-drill strong {
+  display: grid;
+  place-items: center;
+  background: #1a1a1a;
+  color: #f5f5f5;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.survival-drill span {
+  padding: 0.55rem 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
 @keyframes future-year-in {
   from {
     opacity: 0;
