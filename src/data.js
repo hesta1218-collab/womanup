@@ -87,7 +87,7 @@ export const rankProfiles = {
     timeline: ['你学会了肘膝连击', '你知道要害在哪', '够用，但别松懈', '你庆幸自己当年开始了'],
   },
   C: {
-    title: '普通女孩',
+    title: '蓄力觉醒',
     art: '拳击',
     reason: '直拳开路，打出空间',
     quote: '你比自己想象的更强',

@@ -107,13 +107,11 @@ export default function ResultPage() {
         <StatPill label="能量原石" value={profile.key} />
       </div>
 
-      <BrutalCard className="mb-5">
-        <div>
-          <p className="text-sm font-black text-blood">推荐的格斗术</p>
-          <h2 className="font-display text-6xl uppercase leading-none text-void sm:text-7xl">{profile.art}</h2>
-          <p className="mt-3 border-l-8 border-blood pl-3 text-lg font-black text-void">{profile.reason}</p>
-          <p className="mt-4 bg-void p-3 font-black text-paper">「{profile.quote}」</p>
-        </div>
+      <BrutalCard className="match-style-collage mb-5">
+        <p className="match-style-label">推荐的格斗术</p>
+        <h2>{profile.art}</h2>
+        <p className="match-style-reason">{profile.reason}</p>
+        <p className="match-style-quote">「{profile.quote}」</p>
       </BrutalCard>
 
       <div>
