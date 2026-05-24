@@ -1,5 +1,15 @@
 [
   {
+    "name": "birb",
+    "score": 1138,
+    "rank": "D",
+    "hours": "3h",
+    "duoScore": 1658,
+    "duoComplete": true,
+    "note": "NOIR-77 系统队友通关 · +520",
+    "updatedAt": 1779594880008
+  },
+  {
     "name": "Kathy",
     "score": 670,
     "rank": "C",
@@ -8,15 +18,5 @@
     "duoComplete": true,
     "note": "NOIR-77 系统队友通关 · +520",
     "updatedAt": 1779594741073
-  },
-  {
-    "name": "birb",
-    "score": 638,
-    "rank": "D",
-    "hours": "3h",
-    "duoScore": 1158,
-    "duoComplete": true,
-    "note": "系统队友通关 · 双人满分",
-    "updatedAt": 1779594843938
   }
 ]
