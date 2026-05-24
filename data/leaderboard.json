@@ -20,16 +20,6 @@
     "updatedAt": 1779595572080
   },
   {
-    "name": "你",
-    "score": 1155,
-    "rank": "B",
-    "hours": "6h",
-    "duoScore": 1675,
-    "duoComplete": true,
-    "note": "NOIR-77 系统队友通关 · +520",
-    "updatedAt": 1779597502176
-  },
-  {
     "name": "Kathy",
     "score": 670,
     "rank": "C",
@@ -58,5 +48,15 @@
     "duoComplete": true,
     "note": "NOIR-77 系统队友通关 · +520",
     "updatedAt": 1779598156026
+  },
+  {
+    "name": "你",
+    "score": 295,
+    "rank": "C",
+    "hours": "4.5h",
+    "duoScore": 0,
+    "duoComplete": false,
+    "note": "第二关未通关",
+    "updatedAt": 1779599748552
   }
 ]
