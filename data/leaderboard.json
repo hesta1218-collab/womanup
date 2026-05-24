@@ -88,5 +88,15 @@
     "duoComplete": false,
     "note": "第二关未通关",
     "updatedAt": 1779599748552
+  },
+  {
+    "name": "Aimer",
+    "score": 285,
+    "rank": "D",
+    "hours": "3h",
+    "duoScore": 0,
+    "duoComplete": false,
+    "note": "第二关未通关",
+    "updatedAt": 1779608132651
   }
 ]
