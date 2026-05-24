@@ -2,28 +2,31 @@ import { ArrowRight, CheckCircle2, ClipboardList, Map, Siren } from 'lucide-reac
 import { useNavigate } from 'react-router-dom';
 import { ActionButton, BrutalCard, SlashTitle } from '../components.jsx';
 import { survivalDrills, survivalProtocols, survivalScenarios, survivalSkillCards } from '../data.js';
+import { useI18n } from '../i18n.jsx';
 
 export default function SurvivalGuidePage() {
   const navigate = useNavigate();
+  const { get, t } = useI18n();
+  const principles = get('guide.principles', []);
 
   return (
     <>
-      <SlashTitle eyebrow="SURVIVAL FILE" title="生存技能学习" subtitle="先识别风险，再拉开距离，最后补上求助和证据链。" />
+      <SlashTitle eyebrow="SURVIVAL FILE" title={t('guide.survivalTitle')} subtitle={t('guide.survivalSubtitle')} />
 
       <BrutalCard dark className="mb-5">
         <p className="text-xs font-black uppercase text-blood">CORE RULE</p>
-        <h2 className="section-title-light">安全优先级</h2>
+        <h2 className="section-title-light">{t('guide.coreRule')}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <Principle label="1" title="先离开" body="离开封闭空间、死角和人少处。能走就走，能进店就进店。" />
-          <Principle label="2" title="让人看见" body="声音、通话、录像、店员、保安、摄像头，都是外部支点。" />
-          <Principle label="3" title="留下记录" body="时间地点、威胁语言、伤情、证人和聊天记录，事后要能串成线。" />
+          {principles.map((item, index) => (
+            <Principle key={item.title} label={String(index + 1)} title={item.title} body={item.body} />
+          ))}
         </div>
       </BrutalCard>
 
       <section className="mb-5">
         <div className="mb-3 flex items-center gap-2 text-paper">
           <ClipboardList className="text-blood" size={24} strokeWidth={3} />
-          <h2 className="font-display text-4xl uppercase leading-none">四个生存协议</h2>
+          <h2 className="font-display text-4xl uppercase leading-none">{t('guide.protocols')}</h2>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           {survivalProtocols.map((item, index) => (
@@ -50,8 +53,8 @@ export default function SurvivalGuidePage() {
             <p className="text-xs font-black uppercase text-blood">SURVIVAL FILE</p>
             <h2 className="font-display text-4xl uppercase leading-none text-void">{card.name}</h2>
             <p className="mt-3 border-l-8 border-blood pl-3 text-lg font-black text-void">{card.line}</p>
-            <p className="mt-3 border-t-2 border-void pt-2 text-sm font-bold text-ink">适用：{card.scene}</p>
-            <p className="mt-3 bg-void p-3 text-sm font-black text-paper">重点：{card.focus}</p>
+            <p className="mt-3 border-t-2 border-void pt-2 text-sm font-bold text-ink">{t('guide.apply', { scene: card.scene })}</p>
+            <p className="mt-3 bg-void p-3 text-sm font-black text-paper">{t('guide.focus', { focus: card.focus })}</p>
             <div className="mt-3 grid gap-2">
               {card.actions.map((action) => (
                 <div key={action} className="survival-check survival-check-dark">
@@ -60,7 +63,7 @@ export default function SurvivalGuidePage() {
                 </div>
               ))}
             </div>
-            <p className="mt-3 border-4 border-void bg-blood p-2 text-sm font-black text-paper">避坑：{card.avoid}</p>
+            <p className="mt-3 border-4 border-void bg-blood p-2 text-sm font-black text-paper">{t('guide.avoid', { avoid: card.avoid })}</p>
           </BrutalCard>
         ))}
       </div>
@@ -68,7 +71,7 @@ export default function SurvivalGuidePage() {
       <section className="my-5">
         <div className="mb-3 flex items-center gap-2 text-paper">
           <Map className="text-blood" size={24} strokeWidth={3} />
-          <h2 className="font-display text-4xl uppercase leading-none">场景拆解</h2>
+          <h2 className="font-display text-4xl uppercase leading-none">{t('guide.scenes')}</h2>
         </div>
         <div className="grid gap-3">
           {survivalScenarios.map((item) => (
@@ -76,9 +79,9 @@ export default function SurvivalGuidePage() {
               <p className="text-xs font-black uppercase text-blood">SCENE</p>
               <h3 className="section-title-light">{item.scene}</h3>
               <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                <ScenarioBlock title="警报" body={item.cue} />
-                <ScenarioBlock title="动作" body={item.move} />
-                <ScenarioBlock title="话术" body={item.line} hot />
+                <ScenarioBlock title={t('guide.alarm')} body={item.cue} />
+                <ScenarioBlock title={t('guide.action')} body={item.move} />
+                <ScenarioBlock title={t('guide.script')} body={item.line} hot />
               </div>
             </BrutalCard>
           ))}
@@ -87,12 +90,12 @@ export default function SurvivalGuidePage() {
 
       <BrutalCard className="mb-5">
         <div className="flex items-start gap-3">
-          <Siren className="mt-1 shrink-0 text-blood" size={30} strokeWidth={3} />
-          <div>
-            <p className="text-xs font-black uppercase text-blood">AFTERCARE</p>
-            <h2 className="section-title-dark">事后不要只靠情绪硬扛</h2>
+            <Siren className="mt-1 shrink-0 text-blood" size={30} strokeWidth={3} />
+            <div>
+              <p className="text-xs font-black uppercase text-blood">AFTERCARE</p>
+            <h2 className="section-title-dark">{t('guide.aftercareTitle')}</h2>
             <p className="mt-2 text-sm font-bold text-ink">
-              安全离开后要补记录、补求助、补身体检查。把“我感觉不对”整理成时间线，才能保护之后的自己。
+              {t('guide.aftercareBody')}
             </p>
           </div>
         </div>
@@ -107,7 +110,7 @@ export default function SurvivalGuidePage() {
       </BrutalCard>
 
       <ActionButton className="mt-5 w-full" onClick={() => navigate('/elevator-test')}>
-        下一页：电梯测试
+        {t('guide.nextElevator')}
         <ArrowRight size={18} strokeWidth={3} />
       </ActionButton>
     </>

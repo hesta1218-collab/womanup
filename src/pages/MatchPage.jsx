@@ -2,18 +2,20 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Bot, Radio, Users } from 'lucide-react';
 import { ActionButton, BrutalCard, InviteBox, SlashTitle } from '../components.jsx';
 import { getInvite, SYSTEM_TEAMMATE } from '../data.js';
+import { useI18n } from '../i18n.jsx';
 
 export default function MatchPage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const inviteCode = getInvite();
 
   return (
     <>
-      <SlashTitle eyebrow="STAGE 02" title="Women Up！双人闯关游戏 —— 找回呼吸" subtitle="系统队友已接入。任意一方完成吸气和呼气，即可通过第二关。" />
+      <SlashTitle eyebrow={t('match.eyebrow')} title={t('match.title')} subtitle={t('match.subtitle')} />
 
       <BrutalCard className="mb-5">
-        <h2 className="section-title-dark">你的邀请码</h2>
-        <p className="mb-4 mt-1 text-sm font-bold text-ink">发给朋友。不是求陪伴，是组队升级。</p>
+        <h2 className="section-title-dark">{t('match.invite')}</h2>
+        <p className="mb-4 mt-1 text-sm font-bold text-ink">{t('match.inviteBody')}</p>
         <InviteBox code={inviteCode} />
       </BrutalCard>
 
@@ -22,33 +24,33 @@ export default function MatchPage() {
           <div>
             <p className="text-xs font-black uppercase text-blood">AUTO MATCHED</p>
             <h2 className="section-title-light">{SYSTEM_TEAMMATE.name}</h2>
-            <p className="mt-2 text-sm font-bold text-ash">{SYSTEM_TEAMMATE.note}</p>
+            <p className="mt-2 text-sm font-bold text-ash">{t('match.teammateNote')}</p>
           </div>
           <Bot className="text-blood" size={42} strokeWidth={3} />
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="demo-chip">
             <Radio size={16} strokeWidth={3} />
-            异步待命
+            {t('match.asyncReady')}
           </div>
           <div className="demo-chip">
             <Users size={16} strokeWidth={3} />
-            任一方通关
+            {t('match.anyPass')}
           </div>
         </div>
         <ActionButton className="mt-4 w-full" onClick={() => navigate('/squad')}>
-          进入战队空间
+          {t('match.enterSquad')}
           <ArrowRight size={18} strokeWidth={3} />
         </ActionButton>
       </BrutalCard>
 
       <BrutalCard>
         <p className="text-xs font-black uppercase text-blood">ASYNC DUO</p>
-        <h2 className="section-title-dark">双人规则</h2>
+        <h2 className="section-title-dark">{t('match.rules')}</h2>
         <div className="mt-3 grid gap-2 text-sm font-bold text-ink">
-          <p>1. 第二关：找回呼吸，跟随节奏完成一次吸气和呼气。</p>
-          <p>2. 队友不需要同时出现在摄像头前。</p>
-          <p>3. 只要任何一方完成本关，战队直接通关。</p>
+          <p>{t('match.rule1')}</p>
+          <p>{t('match.rule2')}</p>
+          <p>{t('match.rule3')}</p>
         </div>
       </BrutalCard>
     </>

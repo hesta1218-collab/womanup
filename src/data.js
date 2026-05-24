@@ -35,15 +35,15 @@ export const sliders = [
 ];
 
 export const initialAllocation = {
-  combat: 2,
-  survival: 2,
-  strength: 1,
-  notes: 0.5,
-  food: 3,
-  sleep: 8,
-  work: 5.5,
-  love: 1,
-  scroll: 1,
+  combat: 0,
+  survival: 0,
+  strength: 0,
+  notes: 0,
+  food: 0,
+  sleep: 0,
+  work: 0,
+  love: 0,
+  scroll: 0,
   social: 0,
 };
 
@@ -109,7 +109,7 @@ export const rankProfiles = {
     reason: '先活下来，再变强',
     quote: '觉醒从今天开始',
     punchline: '你不是弱，你只是还没开始把自己放回第一位。',
-    advice: '从今天开始，每天5分钟。把刷短视频的时间砍一半。',
+    advice: '从今天开始，每天5分钟。先把一小段时间留给训练、恢复和自我保护。',
     radar: [30, 28, 34, 42, 32],
     timeline: ['你觉得没必要', '你躲过了第一次', '那个“万一”来了', '你成为“幸存者”，而不是“战士”'],
   },
@@ -208,7 +208,7 @@ export const trajectoryDetails = {
     {
       year: '1年后',
       headline: '你觉得没必要',
-      body: '你把训练排到很远以后，把短视频和无效社交排到今天。身体没有错，它只是按你的日程长成了现在的样子。',
+      body: '你把训练排到很远以后，把身体感受和自我保护放到今天之后。身体没有错，它只是按你的日程长成了现在的样子。',
     },
     {
       year: '2年后',
@@ -574,19 +574,32 @@ export function getLeaderboardRecords() {
   if (!saved) return [];
 
   try {
-    const records = JSON.parse(saved);
-    if (!Array.isArray(records)) return [];
-    return records
-      .filter((record) => record?.name && Number.isFinite(Number(record.score)))
-      .map((record) => ({
-        ...record,
-        score: Number(record.score),
-        duoScore: Number(record.duoScore || 0),
-        updatedAt: Number(record.updatedAt || 0),
-      }));
+    return normalizeLeaderboardRecords(JSON.parse(saved));
   } catch {
     return [];
   }
+}
+
+export function normalizeLeaderboardRecords(records) {
+  if (!Array.isArray(records)) return [];
+  return records
+    .filter((record) => record?.name && Number.isFinite(Number(record.score)))
+    .map((record) => ({
+      ...record,
+      name: String(record.name).trim().slice(0, 18),
+      score: Number(record.score),
+      duoScore: Number(record.duoScore || 0),
+      updatedAt: Number(record.updatedAt || 0),
+    }))
+    .filter((record) => record.name)
+    .sort((a, b) => b.score - a.score || b.updatedAt - a.updatedAt)
+    .slice(0, 100);
+}
+
+export function cacheLeaderboardRecords(records) {
+  const normalized = normalizeLeaderboardRecords(records);
+  localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(normalized));
+  return normalized;
 }
 
 export function saveLeaderboardRecord(record) {
@@ -608,6 +621,39 @@ export function saveLeaderboardRecord(record) {
   const sorted = next.sort((a, b) => b.score - a.score || b.updatedAt - a.updatedAt).slice(0, 60);
   localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(sorted));
   return sorted;
+}
+
+export async function fetchSharedLeaderboardRecords() {
+  try {
+    const response = await fetch('/api/leaderboard', {
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) throw new Error('Leaderboard unavailable');
+    const data = await response.json();
+    return cacheLeaderboardRecords(data.records);
+  } catch {
+    return getLeaderboardRecords();
+  }
+}
+
+export async function syncSharedLeaderboardRecord(record) {
+  const localRecords = saveLeaderboardRecord(record);
+
+  try {
+    const response = await fetch('/api/leaderboard', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(record),
+    });
+    if (!response.ok) throw new Error('Leaderboard sync failed');
+    const data = await response.json();
+    return cacheLeaderboardRecords(data.records);
+  } catch {
+    return localRecords;
+  }
 }
 
 export function getInvite() {

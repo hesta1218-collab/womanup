@@ -15,10 +15,13 @@ import {
   getWisdomScore,
   hasSavedAllocation,
   isTeamPassed,
-  saveLeaderboardRecord,
+  fetchSharedLeaderboardRecords,
+  syncSharedLeaderboardRecord,
 } from '../data.js';
+import { useI18n } from '../i18n.jsx';
 
 export default function LeaderboardPage() {
+  const { t } = useI18n();
   const allocation = getAllocation();
   const training = getTraining();
   const [savedRecords, setSavedRecords] = useState(() => getLeaderboardRecords());
@@ -40,16 +43,30 @@ export default function LeaderboardPage() {
             hours: `${profile.powerHours}h`,
             duoScore,
             duoComplete: passed,
-            note: passed ? `${SYSTEM_TEAMMATE.name} 系统队友通关 · +${DUO_CLEAR_BONUS}` : '第二关未通关',
+            note: passed
+              ? t('leaderboard.teammatePass', { name: SYSTEM_TEAMMATE.name, bonus: DUO_CLEAR_BONUS })
+              : t('leaderboard.teammateMissing'),
             mine: true,
           }
         : null,
-    [duoScore, hasPlayed, passed, playerName, profile.key, profile.powerHours, rankInfo.score],
+    [duoScore, hasPlayed, passed, playerName, profile.key, profile.powerHours, rankInfo.score, t],
   );
 
   useEffect(() => {
-    if (!currentRecord) return;
-    setSavedRecords(saveLeaderboardRecord(currentRecord));
+    let active = true;
+
+    async function syncRecords() {
+      const records = currentRecord
+        ? await syncSharedLeaderboardRecord(currentRecord)
+        : await fetchSharedLeaderboardRecords();
+      if (active) setSavedRecords(records);
+    }
+
+    syncRecords();
+
+    return () => {
+      active = false;
+    };
   }, [currentRecord]);
 
   const singles = [...savedRecords]
@@ -62,22 +79,22 @@ export default function LeaderboardPage() {
 
   return (
     <>
-      <SlashTitle eyebrow="RANK" title="战斗力排行榜" />
+      <SlashTitle eyebrow={t('leaderboard.eyebrow')} title={t('leaderboard.title')} />
 
       <div className="mb-5 grid grid-cols-3 gap-3">
-        <StatPill label="单人分" value={rankInfo.score} />
-        <StatPill label="电梯测试" value={wisdomScore.complete ? wisdomScore.score : '--'} />
-        <StatPill label="答对" value={`${wisdomScore.correct}/${wisdomScore.total}`} />
+        <StatPill label={t('leaderboard.singleScore')} value={rankInfo.score} />
+        <StatPill label={t('leaderboard.elevator')} value={wisdomScore.complete ? wisdomScore.score : '--'} />
+        <StatPill label={t('leaderboard.correct')} value={`${wisdomScore.correct}/${wisdomScore.total}`} />
       </div>
 
       <div className="mb-5 grid grid-cols-2 gap-3">
-        <StatPill label="双人分" value={duoScore} />
-        <StatPill label="档位" value={profile.key} />
+        <StatPill label={t('leaderboard.duoScore')} value={duoScore} />
+        <StatPill label={t('leaderboard.rank')} value={profile.key} />
       </div>
 
       <BrutalCard dark className="mb-5">
-        <h2 className="section-title-light">单人战斗力榜</h2>
-        <p className="mt-1 text-sm font-bold text-ash">现场观众完成测试后会进入这里。当前版本不再混入网站自带假数据。</p>
+        <h2 className="section-title-light">{t('leaderboard.singleBoard')}</h2>
+        <p className="mt-1 text-sm font-bold text-ash">{t('leaderboard.singleBody')}</p>
         <div className="mt-4 space-y-2">
           {singles.length ? (
             singles.map((player, index) => (
@@ -89,14 +106,14 @@ export default function LeaderboardPage() {
               </div>
             ))
           ) : (
-            <p className="leaderboard-empty">还没有现场成绩。完成 24 小时测试后，第一个名字会出现在这里。</p>
+            <p className="leaderboard-empty">{t('leaderboard.singleEmpty')}</p>
           )}
         </div>
       </BrutalCard>
 
       <BrutalCard className="mb-5">
-        <h2 className="section-title-dark">最强搭档榜</h2>
-        <p className="mt-1 text-sm font-bold text-ink">Demo 版使用系统队友：完成第二关即获得双人满分加成 {DUO_CLEAR_BONUS}。</p>
+        <h2 className="section-title-dark">{t('leaderboard.duoBoard')}</h2>
+        <p className="mt-1 text-sm font-bold text-ink">{t('leaderboard.duoBody', { bonus: DUO_CLEAR_BONUS })}</p>
         <div className="mt-4 space-y-2">
           {duos.length ? (
             duos.map((team, index) => (
@@ -108,14 +125,14 @@ export default function LeaderboardPage() {
               </div>
             ))
           ) : (
-            <p className="leaderboard-empty leaderboard-empty-light">还没有通关第二关的队伍。完成“找回呼吸”后会出现在这里。</p>
+            <p className="leaderboard-empty leaderboard-empty-light">{t('leaderboard.duoEmpty')}</p>
           )}
         </div>
       </BrutalCard>
 
       <Link to="/match">
         <ActionButton className="w-full">
-          回到战队
+          {t('leaderboard.backSquad')}
           <ArrowRight size={18} strokeWidth={3} />
         </ActionButton>
       </Link>

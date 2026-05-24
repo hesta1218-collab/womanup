@@ -1,5 +1,6 @@
 import { Camera, Copy, Download, Medal, Share2 } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import { useI18n } from './i18n.jsx';
 
 export function SlashTitle({ eyebrow = 'Fight together！', title, subtitle }) {
   return (
@@ -41,7 +42,8 @@ export function StatPill({ label, value, tone = 'light' }) {
 }
 
 export function RadarChart({ values, score }) {
-  const labels = ['攻击', '防御', '敏捷', '意志', '策略'];
+  const { get } = useI18n();
+  const labels = get('components.radar', ['攻击', '防御', '敏捷', '意志', '策略']);
   const center = 130;
   const maxRadius = 70;
   const points = values
@@ -129,6 +131,8 @@ export function RadarChart({ values, score }) {
 }
 
 export function ShareTools({ targetId }) {
+  const { t } = useI18n();
+
   async function capture() {
     const node = document.getElementById(targetId);
     if (!node) return;
@@ -147,32 +151,34 @@ export function ShareTools({ targetId }) {
     <div className="grid grid-cols-2 gap-3">
       <ActionButton variant="black" onClick={capture}>
         <Download size={18} strokeWidth={3} />
-        截图保存
+        {t('components.saveImage')}
       </ActionButton>
       <ActionButton variant="red" onClick={copyLink}>
         <Share2 size={18} strokeWidth={3} />
-        复制链接
+        {t('components.copyLink')}
       </ActionButton>
     </div>
   );
 }
 
 export function InviteBox({ code }) {
+  const { t } = useI18n();
+
   async function copy() {
     await navigator.clipboard?.writeText(code);
   }
 
   return (
     <div className="border-4 border-void bg-paper p-4 text-void shadow-brutal">
-      <p className="text-xs font-black uppercase">INVITE CODE</p>
+      <p className="text-xs font-black uppercase">{t('components.inviteCode')}</p>
       <div className="mt-2 flex items-center justify-between gap-3">
         <strong className="font-display text-3xl tracking-normal">{code}</strong>
         <button
           type="button"
           onClick={copy}
           className="grid h-11 w-11 place-items-center border-4 border-void bg-blood text-paper shadow-[4px_4px_0_#1A1A1A]"
-          aria-label="复制邀请码"
-          title="复制邀请码"
+          aria-label={t('components.copyInvite')}
+          title={t('components.copyInvite')}
         >
           <Copy size={20} strokeWidth={3} />
         </button>
@@ -182,10 +188,12 @@ export function InviteBox({ code }) {
 }
 
 export function CameraBadge({ active }) {
+  const { t } = useI18n();
+
   return (
     <div className={`inline-flex items-center gap-2 border-2 px-3 py-1 text-xs font-black ${active ? 'border-blood bg-blood text-paper' : 'border-void bg-paper text-void'}`}>
       <Camera size={14} strokeWidth={3} />
-      {active ? '视觉检测在线' : '等待摄像头'}
+      {active ? t('components.cameraOn') : t('components.cameraWaiting')}
     </div>
   );
 }

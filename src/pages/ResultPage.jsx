@@ -14,11 +14,13 @@ import {
   historicalWomenQuotes,
   isTeamPassed,
   trajectoryDetails,
-  saveLeaderboardRecord,
+  syncSharedLeaderboardRecord,
 } from '../data.js';
+import { useI18n } from '../i18n.jsx';
 
 export default function ResultPage() {
   const navigate = useNavigate();
+  const { get, t } = useI18n();
   const allocation = getAllocation();
   const training = getTraining();
   const [leaderboardRecords, setLeaderboardRecords] = useState(() => getLeaderboardRecords());
@@ -38,17 +40,12 @@ export default function ResultPage() {
       hours: `${profile.powerHours}h`,
       duoScore,
       duoComplete,
-      note: duoComplete ? '系统队友通关 · 双人满分' : '第二关未通关',
+      note: duoComplete ? t('result.duoPassed') : t('result.duoNotPassed'),
     }),
-    [duoComplete, duoScore, playerName, profile.key, profile.powerHours, rankInfo.score],
+    [duoComplete, duoScore, playerName, profile.key, profile.powerHours, rankInfo.score, t],
   );
-  const radarStats = [
-    ['攻击', profile.radar[0]],
-    ['防御', profile.radar[1]],
-    ['敏捷', profile.radar[2]],
-    ['意志', profile.radar[3]],
-    ['策略', profile.radar[4]],
-  ];
+  const radarLabels = get('components.radar', ['攻击', '防御', '敏捷', '意志', '策略']);
+  const radarStats = radarLabels.map((label, index) => [label, profile.radar[index]]);
   const resultLeaderboard = leaderboardRecords
     .filter((record) => record.name !== playerName)
     .concat(currentRecord)
@@ -56,12 +53,20 @@ export default function ResultPage() {
     .slice(0, 10);
 
   useEffect(() => {
-    setLeaderboardRecords(saveLeaderboardRecord(currentRecord));
+    let active = true;
+
+    syncSharedLeaderboardRecord(currentRecord).then((records) => {
+      if (active) setLeaderboardRecords(records);
+    });
+
+    return () => {
+      active = false;
+    };
   }, [currentRecord]);
 
   return (
     <>
-      <SlashTitle eyebrow="RESULT" title={`${profile.key}档 · ${profile.title}`} subtitle={profile.punchline} />
+      <SlashTitle eyebrow={t('result.eyebrow')} title={`${profile.key} · ${profile.title}`} subtitle={profile.punchline} />
 
       <section id="result-card" className="fight-card mb-5">
         <div className="ufc-card-shell">
@@ -72,11 +77,11 @@ export default function ResultPage() {
                 <strong>{playerName}</strong>
               </div>
               <div>
-                <span>战斗力</span>
+                <span>{t('result.combatPower')}</span>
                 <b>{rankInfo.score}</b>
               </div>
               <div>
-                <span>档位</span>
+                <span>{t('result.rank')}</span>
                 <b>{profile.key}</b>
               </div>
             </div>
@@ -99,14 +104,14 @@ export default function ResultPage() {
             <div className="ufc-card-footer">
               <span>RANK #{rankInfo.rank}</span>
               <span>{profile.reason}</span>
-              <span>{wisdomScore.complete ? `${wisdomScore.score} 电梯测试` : '电梯测试待完成'}</span>
+              <span>{wisdomScore.complete ? `${wisdomScore.score} ${t('result.elevator')}` : t('result.elevatorPending')}</span>
             </div>
           </div>
 
           <div className="ufc-side-panel">
             <div className="ufc-side-title">
               <span>FIVE DIMENSIONS</span>
-              <strong>五维数据</strong>
+              <strong>{t('result.five')}</strong>
             </div>
 
             <div className="ufc-radar-box">
@@ -131,13 +136,13 @@ export default function ResultPage() {
       </section>
 
       <div className="mb-5 grid grid-cols-3 gap-3">
-        <StatPill label="战斗+知识" value={`${profile.powerHours}h`} />
-        <StatPill label="电梯测试" value={wisdomScore.complete ? wisdomScore.score : '--'} />
-        <StatPill label="能量原石" value={profile.key} />
+        <StatPill label={t('result.combatKnowledge')} value={`${profile.powerHours}h`} />
+        <StatPill label={t('result.elevator')} value={wisdomScore.complete ? wisdomScore.score : '--'} />
+        <StatPill label={t('result.energyStone')} value={profile.key} />
       </div>
 
       <BrutalCard className="match-style-collage mb-5">
-        <p className="match-style-label">推荐的格斗术</p>
+        <p className="match-style-label">{t('result.recommended')}</p>
         <h2>{profile.art}</h2>
         <p className="match-style-reason">{profile.reason}</p>
         <p className="match-style-quote">「{profile.quote}」</p>
@@ -145,11 +150,11 @@ export default function ResultPage() {
 
       <div>
         <BrutalCard dark className="mb-5">
-          <h2 className="section-title-light">1 / 2 / 5 / 10 年轨迹</h2>
+          <h2 className="section-title-light">{t('result.timeline')}</h2>
           <div className="mt-4 space-y-3">
             {trajectory.map((scene) => (
               <div key={scene.year} className="timeline-row">
-                <span>{scene.year.replace('后', '')}</span>
+                <span>{scene.year.replace('后', '').replace('後', '')}</span>
                 <p>
                   <strong className="block text-paper">{scene.headline}</strong>
                   <small className="mt-1 block text-ash">{scene.body}</small>
@@ -158,23 +163,23 @@ export default function ResultPage() {
             ))}
           </div>
           <button type="button" onClick={() => navigate('/trajectory')} className="mt-4 border-4 border-paper px-4 py-3 font-black text-paper">
-            重播未来动画
+            {t('result.replayFuture')}
           </button>
         </BrutalCard>
 
         <BrutalCard className="mb-5">
-          <p className="text-xs font-black uppercase text-blood">PRIVATE ORDER</p>
-          <h2 className="section-title-dark">专属建议</h2>
+          <p className="text-xs font-black uppercase text-blood">{t('result.privateOrder')}</p>
+          <h2 className="section-title-dark">{t('result.advice')}</h2>
           <p className="mt-2 text-xl font-black text-void">{profile.advice}</p>
         </BrutalCard>
       </div>
 
       <BrutalCard className="mb-5">
-        <h2 className="section-title-dark">女性综合战斗力排名榜</h2>
-        <p className="mt-1 text-sm font-bold text-ink">这里只显示现场真实完成测试的成绩，不再混入网站自带数据。</p>
+        <h2 className="section-title-dark">{t('result.rankingTitle')}</h2>
+        <p className="mt-1 text-sm font-bold text-ink">{t('result.rankingBody')}</p>
         <div className="mt-4 bg-void p-4 text-paper">
           <p className="font-display text-3xl uppercase text-blood">{rankInfo.line}</p>
-          <p className="mt-1 text-sm font-bold text-ash">你可以重新分配 24 小时或完成关卡，刷新自己的最好成绩。</p>
+          <p className="mt-1 text-sm font-bold text-ash">{t('result.rankingHint')}</p>
         </div>
         <div className="mt-4 space-y-2">
           {resultLeaderboard.map((player, index) => (
@@ -190,7 +195,7 @@ export default function ResultPage() {
 
       <BrutalCard dark className="mb-5">
         <p className="text-xs font-black uppercase text-blood">WOMEN WHO FOUGHT</p>
-        <h2 className="section-title-light">战斗力女性历史名人语录</h2>
+        <h2 className="section-title-light">{t('result.quotesTitle')}</h2>
         <div className="mt-4 space-y-3">
           {historicalWomenQuotes.map((item) => (
             <figure key={item.name} className="quote-card">
@@ -205,23 +210,23 @@ export default function ResultPage() {
       </BrutalCard>
 
       <section className="mb-5 grid gap-3">
-        <h2 className="font-display text-4xl uppercase leading-none text-paper">继续学习</h2>
+        <h2 className="font-display text-4xl uppercase leading-none text-paper">{t('result.continueLearning')}</h2>
         <FeatureLink
           icon={Swords}
-          title="格斗技学习"
-          body="认识不同格斗术的训练目标和适用场景。"
+          title={t('result.combatGuide')}
+          body={t('result.combatGuideBody')}
           onClick={() => navigate('/combat')}
         />
         <FeatureLink
           icon={BookOpen}
-          title="生存技能学习"
-          body="学习情境感知、边界表达、撤离和数字求援。"
+          title={t('result.survivalGuide')}
+          body={t('result.survivalGuideBody')}
           onClick={() => navigate('/survival')}
         />
         <FeatureLink
           icon={Brain}
-          title="强女的故事"
-          body="从历史人物里提取判断力、行动力和边界感。"
+          title={t('result.stories')}
+          body={t('result.storiesBody')}
           onClick={() => navigate('/women-stories')}
         />
       </section>
@@ -229,12 +234,12 @@ export default function ResultPage() {
       <div className="mt-5 grid gap-3">
         <ShareTools targetId="result-card" />
         <ActionButton onClick={() => navigate('/game')}>
-          进入闯关游戏
+          {t('result.enterGame')}
           <ArrowRight size={18} strokeWidth={3} />
         </ActionButton>
         <Link to="/test" className="inline-flex items-center justify-center gap-2 border-4 border-paper px-4 py-3 font-black text-paper">
           <RefreshCcw size={18} strokeWidth={3} />
-          重新分配 24 小时
+          {t('result.restartTest')}
         </Link>
       </div>
     </>

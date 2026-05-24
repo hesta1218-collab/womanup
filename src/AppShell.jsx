@@ -1,18 +1,20 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Gamepad2, ShieldCheck, Swords, TimerReset, Trophy } from 'lucide-react';
+import { LANGUAGES, useI18n } from './i18n.jsx';
 
 const navItems = [
-  { path: '/test', label: '模拟人生战斗力测试', icon: TimerReset },
-  { path: '/combat', label: '格斗技学习', icon: Swords },
-  { path: '/survival', label: '生存技能学习', icon: ShieldCheck },
-  { path: '/women-stories', label: '强女的故事', icon: BookOpen },
-  { path: '/game', label: '闯关游戏', icon: Gamepad2 },
-  { path: '/leaderboard', label: '战斗力排行榜', icon: Trophy },
+  { path: '/test', labelKey: 'shell.nav.test', icon: TimerReset },
+  { path: '/combat', labelKey: 'shell.nav.combat', icon: Swords },
+  { path: '/survival', labelKey: 'shell.nav.survival', icon: ShieldCheck },
+  { path: '/women-stories', labelKey: 'shell.nav.stories', icon: BookOpen },
+  { path: '/game', labelKey: 'shell.nav.game', icon: Gamepad2 },
+  { path: '/leaderboard', labelKey: 'shell.nav.leaderboard', icon: Trophy },
 ];
 
 export default function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useI18n();
   const isLanding = location.pathname === '/';
 
   return (
@@ -26,9 +28,20 @@ export default function AppShell() {
         <div className="absolute bottom-20 left-0 h-2 w-full -skew-y-6 bg-blood/80" />
       </div>
 
+      <div className="language-switcher" aria-label={t('language.aria')}>
+        <span>{t('language.label')}</span>
+        <select value={language} onChange={(event) => setLanguage(event.target.value)} aria-label={t('language.aria')}>
+          {LANGUAGES.map((item) => (
+            <option key={item.code} value={item.code}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <main className="relative mx-auto min-h-screen w-full max-w-3xl px-4 pb-40 pt-5 sm:px-6 sm:pb-28">
         {!isLanding ? (
-          <button type="button" onClick={() => navigate('/')} className="brand-badge" aria-label="返回 Woman Up 首页">
+          <button type="button" onClick={() => navigate('/')} className="brand-badge" aria-label={t('shell.backHome')}>
             <img src="/assets/wp-logo.jpg" alt="Woman Up logo" />
           </button>
         ) : null}
@@ -50,7 +63,7 @@ export default function AppShell() {
                 className={`nav-button ${active ? 'nav-button-active' : ''}`}
               >
                 <Icon size={18} strokeWidth={3} />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
               </button>
             );
           })}

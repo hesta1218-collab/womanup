@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
 import { ActionButton, BrutalCard, SlashTitle, StatPill } from '../components.jsx';
 import { getAllocation, getProfile, trajectoryDetails } from '../data.js';
+import { useI18n } from '../i18n.jsx';
 
 export default function TrajectoryPage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const allocation = getAllocation();
   const profile = useMemo(() => getProfile(allocation), [allocation]);
   const scenes = trajectoryDetails[profile.key];
@@ -27,11 +29,11 @@ export default function TrajectoryPage() {
 
   return (
     <>
-      <SlashTitle eyebrow="FUTURE CUT" title="未来轨迹" subtitle="用按键切换 1、2、5、10 年后的版本，不必等待自动播放。" />
+      <SlashTitle eyebrow={t('trajectory.eyebrow')} title={t('trajectory.title')} subtitle={t('trajectory.subtitle')} />
 
       <div className="mb-5 grid grid-cols-2 gap-3">
-        <StatPill label="战斗+知识" value={`${profile.powerHours}h`} />
-        <StatPill label="播放进度" value={`${active + 1}/4`} />
+        <StatPill label={t('trajectory.power')} value={`${profile.powerHours}h`} />
+        <StatPill label={t('trajectory.playback')} value={`${active + 1}/4`} />
       </div>
 
       <section key={active} className="future-stage future-stage-cinema mb-5">
@@ -54,18 +56,18 @@ export default function TrajectoryPage() {
               onClick={() => setActive(index)}
               className={index === active ? 'future-dot future-dot-active' : 'future-dot'}
             >
-              {scene.year.replace('后', '')}
+              {scene.year.replace('后', '').replace('後', '')}
             </button>
           ))}
         </div>
       </section>
 
       <BrutalCard dark className="mb-5">
-        <h2 className="section-title-light">命运快进摘要</h2>
+        <h2 className="section-title-light">{t('trajectory.summary')}</h2>
         <div className="mt-4 space-y-3">
           {scenes.map((scene, index) => (
             <div key={scene.year} className={`timeline-row ${index === active ? 'timeline-row-hot' : ''}`}>
-              <span>{scene.year.replace('后', '')}</span>
+              <span>{scene.year.replace('后', '').replace('後', '')}</span>
               <p>{scene.headline}</p>
             </div>
           ))}
@@ -76,24 +78,24 @@ export default function TrajectoryPage() {
         <div className="grid grid-cols-2 gap-3">
           <ActionButton variant="black" onClick={previousScene} disabled={active === 0}>
             <ArrowLeft size={18} strokeWidth={3} />
-            上一段
+            {t('trajectory.previous')}
           </ActionButton>
           <ActionButton onClick={nextScene} disabled={done}>
-            下一段
+            {t('trajectory.next')}
             <ArrowRight size={18} strokeWidth={3} />
           </ActionButton>
         </div>
         {done ? (
           <ActionButton onClick={() => navigate('/result')}>
-            揭晓最终测试结果
+            {t('trajectory.reveal')}
             <ArrowRight size={18} strokeWidth={3} />
           </ActionButton>
         ) : (
-          <div className="cinema-hold">切到 10 年后，即可揭晓最终测试结果。</div>
+          <div className="cinema-hold">{t('trajectory.hold')}</div>
         )}
         <ActionButton variant="black" onClick={replay}>
           <RotateCcw size={18} strokeWidth={3} />
-          重播动画
+          {t('trajectory.replay')}
         </ActionButton>
       </div>
     </>

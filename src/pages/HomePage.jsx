@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2, RotateCcw, ShieldCheck } from 'lucide-react';
 import { ActionButton, BrutalCard, SlashTitle, StatPill } from '../components.jsx';
 import { getPlayerName, getTotal, initialAllocation, saveAllocation, sliders } from '../data.js';
+import { useI18n } from '../i18n.jsx';
 
 const HOURS_IN_DAY = 24;
 const fillTarget = 'sleep';
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [allocation, setAllocation] = useState(initialAllocation);
   const total = getTotal(allocation);
   const remaining = HOURS_IN_DAY - total;
@@ -35,7 +37,7 @@ export default function HomePage() {
 
   function submit() {
     if (!valid) return;
-    const confirmed = window.confirm(`${playerName}，确定把这 24 小时交给这个版本的自己吗？`);
+    const confirmed = window.confirm(t('home.confirm', { name: playerName }));
     if (!confirmed) return;
     saveAllocation(allocation);
     navigate('/trajectory');
@@ -43,12 +45,12 @@ export default function HomePage() {
 
   return (
     <>
-      <SlashTitle title="24小时，你会怎么花？" subtitle={`${playerName}，每一分钟，都在定义10年后的你。`} />
+      <SlashTitle title={t('home.title')} subtitle={t('home.subtitle', { name: playerName })} />
 
       <div className="mb-4 grid grid-cols-3 gap-3">
-        <StatPill label="已分配" value={`${total}h`} />
-        <StatPill label={overBudget ? '超出' : '剩余'} value={`${Math.abs(remaining)}h`} tone={valid ? 'light' : 'dark'} />
-        <StatPill label="PLAYER" value={playerName} tone="dark" />
+        <StatPill label={t('home.allocated')} value={`${total}h`} />
+        <StatPill label={overBudget ? t('home.over') : t('home.remaining')} value={`${Math.abs(remaining)}h`} tone={valid ? 'light' : 'dark'} />
+        <StatPill label={t('common.player')} value={playerName} tone="dark" />
       </div>
 
       <BrutalCard dark className="mb-5">
@@ -59,15 +61,15 @@ export default function HomePage() {
             <AlertTriangle className="mt-1 shrink-0 text-blood" size={24} strokeWidth={3} />
           )}
           <div>
-            <h2 className="font-display text-2xl uppercase">小于或等于 24 小时</h2>
+            <h2 className="font-display text-2xl uppercase">{t('home.budgetTitle')}</h2>
             <p className="mt-1 text-sm font-bold text-ash">
               {valid
-                ? `时间预算成立。剩余 ${remaining} 小时可以留给通勤、洗澡、发呆和恢复。`
-                : `超出 ${Math.abs(remaining)} 小时。现实不会赊账，必须砍掉一部分。`}
+                ? t('home.validBudget', { hours: remaining })
+                : t('home.invalidBudget', { hours: Math.abs(remaining) })}
             </p>
           </div>
         </div>
-        <div className="budget-bar mt-4" aria-label="24 小时时间预算">
+        <div className="budget-bar mt-4" aria-label={t('home.budgetAria')}>
           <span style={{ width: `${budgetProgress}%` }} />
         </div>
       </BrutalCard>
@@ -75,11 +77,11 @@ export default function HomePage() {
       <div className="mb-5 grid grid-cols-2 gap-2">
         <button type="button" className="quick-action" onClick={fillRemaining} disabled={remaining <= 0}>
           <ShieldCheck size={16} strokeWidth={3} />
-          把剩余时间放入睡眠
+          {t('home.fillSleep')}
         </button>
         <button type="button" className="quick-action" onClick={resetAllocation}>
           <RotateCcw size={16} strokeWidth={3} />
-          重置
+          {t('home.reset')}
         </button>
       </div>
 
@@ -91,7 +93,7 @@ export default function HomePage() {
                 <div>
                   <h3 className="font-display text-2xl uppercase text-void">
                     <span className="mr-2">{item.icon}</span>
-                    {item.label}
+                    {t(`sliders.${item.key}`)}
                   </h3>
                 </div>
                 <strong className="time-chip">{allocation[item.key]}h</strong>
@@ -104,7 +106,7 @@ export default function HomePage() {
                 step="0.5"
                 value={allocation[item.key]}
                 onChange={(event) => updateSlider(item.key, event.target.value)}
-                aria-label={item.label}
+                aria-label={t(`sliders.${item.key}`)}
               />
             </BrutalCard>
           );
@@ -113,7 +115,7 @@ export default function HomePage() {
 
       <div className="sticky bottom-24 z-20 mt-6">
         <ActionButton className="w-full" onClick={submit} disabled={!valid}>
-          锁定这 24 小时，播放未来轨迹
+          {t('home.submit')}
         </ActionButton>
       </div>
     </>
