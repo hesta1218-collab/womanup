@@ -20,6 +20,16 @@
     "updatedAt": 1779595572080
   },
   {
+    "name": "Aimer",
+    "score": 1085,
+    "rank": "D",
+    "hours": "3h",
+    "duoScore": 1605,
+    "duoComplete": true,
+    "note": "NOIR-77 系统队友通关 · +520",
+    "updatedAt": 1779608445770
+  },
+  {
     "name": "dawn",
     "score": 703,
     "rank": "D",
@@ -88,15 +98,5 @@
     "duoComplete": false,
     "note": "第二关未通关",
     "updatedAt": 1779599748552
-  },
-  {
-    "name": "Aimer",
-    "score": 285,
-    "rank": "D",
-    "hours": "3h",
-    "duoScore": 0,
-    "duoComplete": false,
-    "note": "第二关未通关",
-    "updatedAt": 1779608132651
   }
 ]
