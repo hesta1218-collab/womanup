@@ -20,6 +20,16 @@
     "updatedAt": 1779595572080
   },
   {
+    "name": "dawn",
+    "score": 703,
+    "rank": "D",
+    "hours": "1h",
+    "duoScore": 1223,
+    "duoComplete": true,
+    "note": "NOIR-77 系统队友通关 · +520",
+    "updatedAt": 1779602448932
+  },
+  {
     "name": "Kathy",
     "score": 670,
     "rank": "C",
@@ -58,15 +68,5 @@
     "duoComplete": false,
     "note": "第二关未通关",
     "updatedAt": 1779599748552
-  },
-  {
-    "name": "dawn",
-    "score": 203,
-    "rank": "D",
-    "hours": "1h",
-    "duoScore": 0,
-    "duoComplete": false,
-    "note": "第二关未通关",
-    "updatedAt": 1779602247927
   }
 ]
