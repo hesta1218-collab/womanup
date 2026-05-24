@@ -243,12 +243,17 @@ button:disabled {
   font-family: 'Courier New', ui-monospace, monospace;
   font-size: 0.9rem;
   font-weight: 900;
-  line-height: 1.25;
+  line-height: 1.58;
 }
 
 .phantom-letter-lead {
   margin-top: 0;
   transform: rotate(-0.7deg);
+  line-height: 1.72;
+}
+
+.phantom-letter-punch {
+  line-height: 1.7;
 }
 
 .ransom-chip,
@@ -257,7 +262,7 @@ button:disabled {
   display: inline-block;
   margin: 0 0.1rem;
   border: 3px solid #1a1a1a;
-  line-height: 1.05;
+  line-height: 1.18;
   vertical-align: baseline;
 }
 
@@ -422,8 +427,9 @@ button:disabled {
 
 @media (max-width: 520px) {
   .landing-banner img {
-    aspect-ratio: 1.85 / 1;
-    object-position: 39% center;
+    aspect-ratio: 3.2 / 1;
+    object-fit: contain;
+    object-position: center;
   }
 
   .phantom-letter-wrap {
@@ -455,7 +461,15 @@ button:disabled {
   .phantom-letter-line {
     margin-top: 0.22rem;
     font-size: 0.82rem;
-    line-height: 1.25;
+    line-height: 1.48;
+  }
+
+  .phantom-letter-lead {
+    line-height: 1.68;
+  }
+
+  .phantom-letter-punch {
+    line-height: 1.62;
   }
 
   .phantom-letter-copy,
