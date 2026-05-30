@@ -108,5 +108,15 @@
     "duoComplete": false,
     "note": "第二关未通关",
     "updatedAt": 1779599748552
+  },
+  {
+    "name": "aaa",
+    "score": 287,
+    "rank": "D",
+    "hours": "2h",
+    "duoScore": 0,
+    "duoComplete": false,
+    "note": "第二关未通关",
+    "updatedAt": 1780125100557
   }
 ]
