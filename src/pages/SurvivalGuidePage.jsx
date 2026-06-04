@@ -8,6 +8,10 @@ export default function SurvivalGuidePage() {
   const navigate = useNavigate();
   const { get, t } = useI18n();
   const principles = get('guide.principles', []);
+  const skillCards = get('survivalSkills') || survivalSkillCards;
+  const protocols = get('survivalProtocols') || survivalProtocols;
+  const scenarios = get('survivalScenarios') || survivalScenarios;
+  const drills = get('survivalDrills') || survivalDrills;
 
   return (
     <>
@@ -29,7 +33,7 @@ export default function SurvivalGuidePage() {
           <h2 className="font-display text-4xl uppercase leading-none">{t('guide.protocols')}</h2>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          {survivalProtocols.map((item, index) => (
+          {protocols.map((item, index) => (
             <BrutalCard key={item.title}>
               <p className="text-xs font-black uppercase text-blood">PROTOCOL 0{index + 1}</p>
               <h3 className="section-title-dark">{item.title}</h3>
@@ -48,7 +52,7 @@ export default function SurvivalGuidePage() {
       </section>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {survivalSkillCards.map((card) => (
+        {skillCards.map((card) => (
           <BrutalCard key={card.name}>
             <p className="text-xs font-black uppercase text-blood">SURVIVAL FILE</p>
             <h2 className="font-display text-4xl uppercase leading-none text-void">{card.name}</h2>
@@ -74,7 +78,7 @@ export default function SurvivalGuidePage() {
           <h2 className="font-display text-4xl uppercase leading-none">{t('guide.scenes')}</h2>
         </div>
         <div className="grid gap-3">
-          {survivalScenarios.map((item) => (
+          {scenarios.map((item) => (
             <BrutalCard key={item.scene} dark>
               <p className="text-xs font-black uppercase text-blood">SCENE</p>
               <h3 className="section-title-light">{item.scene}</h3>
@@ -100,7 +104,7 @@ export default function SurvivalGuidePage() {
           </div>
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          {survivalDrills.map((item) => (
+          {drills.map((item) => (
             <div key={item.day} className="survival-drill">
               <strong>{item.day}</strong>
               <span>{item.task}</span>

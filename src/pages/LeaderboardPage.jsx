@@ -21,7 +21,7 @@ import {
 import { useI18n } from '../i18n.jsx';
 
 export default function LeaderboardPage() {
-  const { t } = useI18n();
+  const { t, get } = useI18n();
   const allocation = getAllocation();
   const training = getTraining();
   const [savedRecords, setSavedRecords] = useState(() => getLeaderboardRecords());
@@ -32,6 +32,11 @@ export default function LeaderboardPage() {
   const duoScore = getDuoScore(rankInfo.score, training);
   const playerName = getPlayerName();
   const hasPlayed = hasSavedAllocation();
+  const teammate = {
+    ...SYSTEM_TEAMMATE,
+    title: get('systemTeammate.title') || SYSTEM_TEAMMATE.title,
+    note: get('systemTeammate.note') || SYSTEM_TEAMMATE.note,
+  };
 
   const currentRecord = useMemo(
     () =>

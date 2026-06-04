@@ -24,14 +24,21 @@ export default function ResultPage() {
   const allocation = getAllocation();
   const training = getTraining();
   const [leaderboardRecords, setLeaderboardRecords] = useState(() => getLeaderboardRecords());
-  const profile = useMemo(() => getProfile(allocation), [allocation]);
+  const baseProfile = useMemo(() => getProfile(allocation), [allocation]);
+  const profile = useMemo(() => {
+    const rankData = get(`ranks.${baseProfile.key}`) || {};
+    return { ...baseProfile, ...rankData };
+  }, [allocation, get, baseProfile]);
   const rankInfo = getRankInfo(allocation, training, leaderboardRecords);
   const wisdomScore = getWisdomScore();
-  const trajectory = trajectoryDetails[profile.key];
+  const trajectory = useMemo(() => get(`trajectories.${baseProfile.key}`) || trajectoryDetails[baseProfile.key], [baseProfile.key, get]);
   const playerName = getPlayerName();
   const duoComplete = isTeamPassed(training);
   const duoScore = getDuoScore(rankInfo.score, training);
-  const quote = useMemo(() => historicalWomenQuotes[Math.floor(Math.random() * historicalWomenQuotes.length)], []);
+  const quote = useMemo(() => {
+    const quotes = get('womenQuotes') || historicalWomenQuotes;
+    return quotes[Math.floor(Math.random() * quotes.length)];
+  }, [get]);
   const currentRecord = useMemo(
     () => ({
       name: playerName,

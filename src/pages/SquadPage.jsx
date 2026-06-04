@@ -17,13 +17,18 @@ import { useI18n } from '../i18n.jsx';
 
 export default function SquadPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, get } = useI18n();
   const allocation = getAllocation();
   const profile = getProfile(allocation);
   const training = getTraining();
   const rankInfo = getRankInfo(allocation, training);
   const passed = isTeamPassed(training);
   const duoScore = getDuoScore(rankInfo.score, training);
+  const teammate = {
+    ...SYSTEM_TEAMMATE,
+    title: get('systemTeammate.title') || SYSTEM_TEAMMATE.title,
+    note: get('systemTeammate.note') || SYSTEM_TEAMMATE.note,
+  };
 
   return (
     <>

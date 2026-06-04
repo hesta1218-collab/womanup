@@ -7,8 +7,9 @@ import { useI18n } from '../i18n.jsx';
 
 export default function ElevatorTestPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
-  const [questions, setQuestions] = useState(() => wisdomQuestions.map(shuffleQuestionOptions));
+  const { t, get } = useI18n();
+  const baseQuestions = get('wisdom.questions') || wisdomQuestions;
+  const [questions, setQuestions] = useState(() => baseQuestions.map(shuffleQuestionOptions));
   const [progress, setProgress] = useState(getWisdomProgress());
   const scoreInfo = getWisdomScore(progress);
   const allPassed = scoreInfo.complete && scoreInfo.correct === scoreInfo.total;
@@ -29,7 +30,8 @@ export default function ElevatorTestPage() {
 
   function restart() {
     resetWisdomProgress();
-    setQuestions(wisdomQuestions.map(shuffleQuestionOptions));
+    const fresh = (get('wisdom.questions') || wisdomQuestions).map(shuffleQuestionOptions);
+    setQuestions(fresh);
     setProgress({});
   }
 

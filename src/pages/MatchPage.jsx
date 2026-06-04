@@ -6,8 +6,13 @@ import { useI18n } from '../i18n.jsx';
 
 export default function MatchPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, get } = useI18n();
   const inviteCode = getInvite();
+  const teammate = {
+    ...SYSTEM_TEAMMATE,
+    title: get('systemTeammate.title') || SYSTEM_TEAMMATE.title,
+    note: get('systemTeammate.note') || SYSTEM_TEAMMATE.note,
+  };
 
   return (
     <>
@@ -24,7 +29,7 @@ export default function MatchPage() {
           <div>
             <p className="text-xs font-black uppercase text-blood">AUTO MATCHED</p>
             <h2 className="section-title-light">{SYSTEM_TEAMMATE.name}</h2>
-            <p className="mt-2 text-sm font-bold text-ash">{t('match.teammateNote')}</p>
+            <p className="mt-2 text-sm font-bold text-ash">{teammate.note}</p>
           </div>
           <Bot className="text-blood" size={42} strokeWidth={3} />
         </div>

@@ -6,14 +6,15 @@ import { useI18n } from '../i18n.jsx';
 
 export default function CombatGuidePage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, get } = useI18n();
+  const cards = get('martialArts') || martialArtsCards;
 
   return (
     <>
       <SlashTitle eyebrow="COMBAT FILE" title={t('guide.combatTitle')} subtitle={t('guide.combatSubtitle')} />
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {martialArtsCards.map((card) => (
+        {cards.map((card) => (
           <BrutalCard key={card.name}>
             <p className="text-xs font-black uppercase text-blood">COMBAT FILE</p>
             <h2 className="font-display text-4xl uppercase leading-none text-void">{card.name}</h2>

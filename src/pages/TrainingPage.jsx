@@ -9,9 +9,14 @@ const BREATH_SECONDS = 8;
 
 export default function TrainingPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, get } = useI18n();
   const savedRef = useRef(getTraining());
   const playerName = getPlayerName();
+  const teammate = {
+    ...SYSTEM_TEAMMATE,
+    title: get('systemTeammate.title') || SYSTEM_TEAMMATE.title,
+    note: get('systemTeammate.note') || SYSTEM_TEAMMATE.note,
+  };
   const breathPhases = [
     { label: t('training.inhale'), cue: t('training.inhaleCue'), duration: 4, type: 'inhale' },
     { label: t('training.exhale'), cue: t('training.exhaleCue'), duration: 4, type: 'exhale' },

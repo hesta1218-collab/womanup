@@ -6,14 +6,15 @@ import { useI18n } from '../i18n.jsx';
 
 export default function WomenStoriesPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, get } = useI18n();
+  const stories = get('womenStories') || historicalWomenStories;
 
   return (
     <>
       <SlashTitle eyebrow="WOMEN WHO FOUGHT" title={t('guide.storiesTitle')} subtitle={t('guide.storiesSubtitle')} />
 
       <div className="grid gap-3">
-        {historicalWomenStories.map((person) => (
+        {stories.map((person) => (
           <BrutalCard key={person.name} dark>
             <p className="text-xs font-black uppercase text-blood">{person.era}</p>
             <h2 className="font-display text-4xl uppercase leading-none text-paper">{person.name}</h2>
