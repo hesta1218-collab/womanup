@@ -7,9 +7,8 @@ import { useI18n } from '../i18n.jsx';
 
 export default function TrajectoryPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, get } = useI18n();
   const allocation = getAllocation();
-  const { get } = useI18n();
   const profile = useMemo(() => getProfile(allocation), [allocation]);
   const scenes = useMemo(() => get(`trajectories.${profile.key}`) || trajectoryDetails[profile.key], [profile.key, get]);
   const [active, setActive] = useState(0);
