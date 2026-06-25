@@ -259,7 +259,7 @@ export const historicalWomenQuotes = [
     source: '《第二性》核心命题译写',
   },
   {
-    name: '撒切尔夫人',
+    name: '玛格丽特·希尔达',
     role: '英国前首相',
     quote: '想让事情被说出来，找男人；想让事情被做成，找女人。',
     source: '常见公开引语',
@@ -271,7 +271,7 @@ export const historicalWomenQuotes = [
     source: '常见精神化引语',
   },
   {
-    name: '武则天',
+    name: '武曌',
     role: '中国历史上唯一女皇帝',
     quote: '无字碑前，功过由后人评。',
     source: '历史意象化表达',
@@ -286,7 +286,7 @@ export const historicalWomenQuotes = [
 
 export const historicalWomenStories = [
   {
-    name: '武则天',
+    name: '武曌',
     era: '唐代',
     title: '从宫廷缝隙里夺回叙事权',
     story: '她在极其复杂的权力系统里向上攀登，最终成为中国历史上唯一被普遍承认的女皇帝。她的故事不是温顺神话，而是关于判断、手腕、耐心和掌控局面的长期训练。',
@@ -321,7 +321,7 @@ export const historicalWomenStories = [
     lesson: '处在陌生环境里，最重要的是快速学习、建立资源、保持判断。',
   },
   {
-    name: '撒切尔夫人',
+    name: '玛格丽特·希尔达',
     era: '20世纪英国',
     title: '在男性政治场里保持硬度',
     story: '她被称为“铁娘子”，这既是标签，也是她在冲突、谈判和长期压力下展现出的政治硬度。',
